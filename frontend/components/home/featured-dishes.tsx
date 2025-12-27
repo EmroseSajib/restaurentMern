@@ -1,30 +1,36 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useTranslations } from "next-intl"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { PageContainer } from "@/components/layout/page-container"
-import { Section } from "@/components/layout/section"
-import { MenuItemCard } from "@/components/domain/menu-item-card"
-import { SkeletonLoader } from "@/components/ui/skeleton-loader"
-import { useMenu } from "@/hooks/use-menu"
+import { MenuItemCard } from "@/components/domain/menu-item-card";
+import { PageContainer } from "@/components/layout/page-container";
+import { Section } from "@/components/layout/section";
+import { Button } from "@/components/ui/button";
+import { SkeletonLoader } from "@/components/ui/skeleton-loader";
+import { useMenu } from "@/hooks/use-menu";
+import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export function FeaturedDishes() {
-  const t = useTranslations("home")
-  const tCommon = useTranslations("common")
-  const { menu, isLoading } = useMenu()
+  const t = useTranslations("home");
+  const tCommon = useTranslations("common");
+  const { menu, isLoading } = useMenu();
 
   // Get first 3 main dishes
-  const featuredDishes = menu.filter((item) => item.isMainDish && item.isAvailable).slice(0, 3)
+  const featuredDishes = menu
+    .filter((item) => item.isMainDish && item.isAvailable)
+    .slice(0, 3);
 
   return (
     <Section background="muted">
       <PageContainer>
         <div className="flex items-end justify-between mb-12">
           <div>
-            <h2 className="font-sans text-3xl md:text-4xl font-bold text-foreground">{t("featuredDishes")}</h2>
-            <p className="mt-2 text-muted-foreground">Discover our chef&apos;s signature creations</p>
+            <h2 className="font-sans text-3xl md:text-4xl font-bold text-foreground">
+              {t("featuredDishes")}
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Discover our chef&apos;s signature creations
+            </p>
           </div>
           <Link href="/menu" className="hidden sm:flex">
             <Button variant="ghost" className="gap-2 bg-transparent">
@@ -54,5 +60,5 @@ export function FeaturedDishes() {
         </div>
       </PageContainer>
     </Section>
-  )
+  );
 }

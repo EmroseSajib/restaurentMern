@@ -10,14 +10,27 @@ import routes from "./routes";
 
 export function createApp() {
   const app = express();
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    // add your deployed frontend domain too later
+  ];
 
   app.use(helmet());
   app.use(
     cors({
-      origin: env.CORS_ORIGIN,
+      origin: (origin, cb) => {
+        // allow Postman / server-to-server calls with no Origin header
+        if (!origin) return cb(null, true);
+        if (allowedOrigins.includes(origin)) return cb(null, true);
+        return cb(new Error(`CORS blocked for origin: ${origin}`));
+      },
       credentials: true,
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
     })
   );
+
   app.post("/v1/webhooks/stripe", express.raw({ type: "application/json" }));
 
   app.use(compression());

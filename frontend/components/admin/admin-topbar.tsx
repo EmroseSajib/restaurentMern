@@ -1,18 +1,24 @@
-"use client"
+"use client";
 
-import { useTranslations } from "next-intl"
-import { Menu, LogOut } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
-import { NotificationDropdown } from "./notification-dropdown"
-import { AdminSidebar } from "./admin-sidebar"
-import { useAdminAuth } from "@/hooks/use-admin-auth"
+import { useAdminAuth } from "@/app/context/admin-auth-context";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { LogOut, Menu } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { AdminSidebar } from "./admin-sidebar";
+import { NotificationDropdown } from "./notification-dropdown";
+// import { useAdminAuth } from "@/hooks/use-admin-auth"
 
 export function AdminTopbar() {
-  const t = useTranslations("admin")
-  const { user, logout } = useAdminAuth()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const t = useTranslations("admin");
+  const { user, logout } = useAdminAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="h-16 border-b bg-background flex items-center justify-between px-6">
@@ -28,13 +34,17 @@ export function AdminTopbar() {
             <AdminSidebar />
           </SheetContent>
         </Sheet>
-        <h1 className="font-sans text-lg font-semibold hidden sm:block">{t("dashboard")}</h1>
+        <h1 className="font-sans text-lg font-semibold hidden sm:block">
+          {t("dashboard")}
+        </h1>
       </div>
 
       <div className="flex items-center gap-4">
         <NotificationDropdown />
         <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground hidden sm:inline">{user?.username}</span>
+          <span className="text-sm text-muted-foreground hidden sm:inline">
+            {user?.username}
+          </span>
           <Button variant="ghost" size="sm" onClick={logout} className="gap-2">
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">{t("logout")}</span>
@@ -42,5 +52,5 @@ export function AdminTopbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }

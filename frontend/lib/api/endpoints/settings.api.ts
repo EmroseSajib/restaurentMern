@@ -1,96 +1,84 @@
-import { apiClient, type ApiResponse } from "../client"
+import { apiClient, type ApiResponse } from "../client";
+import { getStoredAccessToken } from "./auth.api";
 
-export interface OpeningHoursDay {
-  day: string
-  open: string
-  close: string
-  closed: boolean
+export type DayKey = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
+export interface HoursRange {
+  start: string; // "HH:MM"
+  end: string;   // "HH:MM"
 }
 
-export interface DeliveryHours {
-  day: string
-  open: string
-  close: string
-  isAvailable: boolean
+export interface DayHours {
+  isClosed: boolean;
+  ranges: HoursRange[];
 }
+
+export type WeeklyHours = Record<DayKey, DayHours>;
+
+export interface RestaurantInfo {
+  name: string;
+  cuisine: string;
+  address: string;
+  phone: string;
+  country: string;
+}
+
+export interface FulfillmentSettings {
+  deliveryEnabled: boolean;
+  pickupEnabled: boolean;
+  minOrderAmount: number; // cents
+}
+
+export interface SettingsPayload {
+
+  restaurant: RestaurantInfo;
+  fulfillment: FulfillmentSettings;
+  openingHours: WeeklyHours;
+  deliveryHours: WeeklyHours;
+  // optional future field; backend may not have it yet
+  occasionDiscounts?: OccasionDiscount[];
+  updatedAt: string;
+}
+
 
 export interface OccasionDiscount {
-  _id: string
-  name: string
-  description: string
-  discountPercentage: number
-  startDate: string
-  endDate: string
-  isActive: boolean
+  id?: string;
+  name: string;
+  description: string;
+  discountPercentage: number;
+  startDate?: string;
+  endDate?: string;
 }
 
-export interface RestaurantSettings {
-  restaurantName: string
-  contactEmail: string
-  contactPhone: string
-  acceptingOrders: boolean
-  minimumOrderAmount: number
-  deliveryFee: number
-  freeDeliveryThreshold: number
-  estimatedDeliveryTime: string
-  estimatedPickupTime: string
-  deliveryEnabled: boolean
-  pickupEnabled: boolean
-  openingHours: OpeningHoursDay[]
-  deliveryHours: DeliveryHours[]
+export async function getSettings(): Promise<ApiResponse<SettingsPayload>> {
+  return apiClient.get<ApiResponse<SettingsPayload>>("/settings");
 }
 
-export interface DashboardStats {
-  totalOrders: number
-  todayOrders: number
-  revenue: number
-  todayRevenue: number
-  pendingOrders: number
-  totalReservations: number
-  todayReservations: number
+export async function getOpeningHours(): Promise<
+  ApiResponse<{ openingHours: WeeklyHours; deliveryHours: WeeklyHours }>
+> {
+  return apiClient.get<ApiResponse<{ openingHours: WeeklyHours; deliveryHours: WeeklyHours }>>(
+    "/settings/opening-hours"
+  );
 }
 
-async function getSettings(): Promise<RestaurantSettings> {
-  const response = await apiClient.get<ApiResponse<RestaurantSettings>>("/settings")
-  return response.data
+export async function getActiveDiscounts(): Promise<ApiResponse<OccasionDiscount[]>> {
+  // Best-effort: try reading from /settings; if absent, return empty array.
+  const s = await getSettings();
+  const discounts = Array.isArray((s.data as any)?.occasionDiscounts) ? ((s.data as any).occasionDiscounts as OccasionDiscount[]) : [];
+  return { success: true, data: discounts };
 }
 
-async function getOpeningHours(): Promise<OpeningHoursDay[]> {
-  const response = await apiClient.get<ApiResponse<OpeningHoursDay[]>>("/settings/opening-hours")
-  return response.data
-}
-
-async function getDeliveryHours(): Promise<DeliveryHours[]> {
-  const response = await apiClient.get<ApiResponse<DeliveryHours[]>>("/settings/delivery-hours")
-  return response.data
-}
-
-async function getActiveDiscounts(): Promise<OccasionDiscount[]> {
-  const response = await apiClient.get<ApiResponse<OccasionDiscount[]>>("/settings/discounts/active")
-  return response.data
-}
-
-async function getDashboardStats(): Promise<DashboardStats> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("adminToken") : null
-  const response = await apiClient.get<ApiResponse<DashboardStats>>("/admin/dashboard/stats", {
+export async function getDashboardStats(): Promise<ApiResponse<any>> {
+  const token = getStoredAccessToken();
+  return apiClient.get<ApiResponse<any>>("/admin/dashboard/stats", {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
-  })
-  return response.data
+  });
 }
 
-async function updateSettings(settings: Partial<RestaurantSettings>): Promise<RestaurantSettings> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("adminToken") : null
-  const response = await apiClient.put<ApiResponse<RestaurantSettings>>("/admin/settings", settings, {
+export async function updateSettings(input: Omit<SettingsPayload, "updatedAt">): Promise<ApiResponse<SettingsPayload>> {
+  const token = getStoredAccessToken();
+  return apiClient.put<ApiResponse<SettingsPayload>>("/settings/admin", input, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
-  })
-  return response.data
-}
-
-export const settingsApi = {
-  getSettings,
-  getOpeningHours,
-  getDeliveryHours,
-  getActiveDiscounts,
-  getDashboardStats,
-  updateSettings,
+  });
 }

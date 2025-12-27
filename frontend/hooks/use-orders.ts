@@ -1,15 +1,26 @@
-"use client"
+"use client";
 
-import useSWR from "swr"
-import { getOrders, getOrder, updateOrderStatus, type OrderStatus } from "@/lib/api"
+import {
+  getOrder,
+  getOrders,
+  updateOrderStatus,
+  type OrderStatus,
+} from "@/lib/api";
+import useSWR from "swr";
 
-export function useOrders(params?: { status?: OrderStatus; page?: number; limit?: number }) {
-  const { data, error, isLoading, mutate } = useSWR(["orders", params], () => getOrders(params))
+export function useOrders(params?: {
+  status?: OrderStatus;
+  page?: number;
+  limit?: number;
+}) {
+  const { data, error, isLoading, mutate } = useSWR(["orders", params], () =>
+    getOrders(params)
+  );
 
   const updateStatus = async (orderId: string, status: OrderStatus) => {
-    await updateOrderStatus(orderId, status)
-    mutate()
-  }
+    await updateOrderStatus(orderId, status);
+    mutate();
+  };
 
   return {
     orders: data?.data.orders || [],
@@ -20,18 +31,19 @@ export function useOrders(params?: { status?: OrderStatus; page?: number; limit?
     error,
     mutate,
     updateStatus,
-  }
+  };
 }
 
 export function useOrder(orderNumber: string) {
-  const { data, error, isLoading, mutate } = useSWR(orderNumber ? ["order", orderNumber] : null, () =>
-    getOrder(orderNumber),
-  )
+  const { data, error, isLoading, mutate } = useSWR(
+    orderNumber ? ["order", orderNumber] : null,
+    () => getOrder(orderNumber)
+  );
 
   return {
     order: data?.data,
     isLoading,
     error,
     mutate,
-  }
+  };
 }

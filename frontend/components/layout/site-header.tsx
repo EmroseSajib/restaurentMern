@@ -1,53 +1,61 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useTranslations } from "next-intl"
-import { useState, useEffect } from "react"
-import { Menu, ShoppingBag, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
-import { LanguageSwitcher } from "./language-switcher"
-import { PageContainer } from "./page-container"
-import { useCart } from "@/hooks/use-cart"
-import { useAdminAuth } from "@/hooks/use-admin-auth"
-import { cn } from "@/lib/utils"
-import type { Locale } from "@/i18n/config"
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+// import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { useAdminAuth } from "@/app/context/admin-auth-context";
+import { useCart } from "@/hooks/use-cart";
+import type { Locale } from "@/i18n/config";
+import { cn } from "@/lib/utils";
+import { Menu, ShoppingBag, User } from "lucide-react";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { LanguageSwitcher } from "./language-switcher";
+import { PageContainer } from "./page-container";
 
 interface SiteHeaderProps {
-  locale: Locale
+  locale: Locale;
 }
 
 export function SiteHeader({ locale }: SiteHeaderProps) {
-  const t = useTranslations()
-  const pathname = usePathname()
-  const { itemCount, isLoaded } = useCart()
-  const { isAuthenticated } = useAdminAuth()
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const t = useTranslations();
+  const pathname = usePathname();
+  const { itemCount, isLoaded } = useCart();
+  const { isAuthenticated } = useAdminAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { href: "/menu", label: t("nav.menu") },
     { href: "/reservations", label: t("nav.reservations") },
     { href: "/catering", label: t("nav.catering") },
     { href: "/gift-vouchers", label: t("nav.giftVouchers") },
-  ]
+  ];
 
-  const isActive = (href: string) => pathname === href
+  const isActive = (href: string) => pathname === href;
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled ? "bg-background/95 backdrop-blur-md shadow-sm" : "bg-transparent",
+        isScrolled
+          ? "bg-background/95 backdrop-blur-md shadow-sm"
+          : "bg-transparent"
       )}
     >
       <PageContainer size="wide">
@@ -68,7 +76,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                 href={link.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  isActive(link.href) ? "text-primary" : "text-muted-foreground",
+                  isActive(link.href) ? "text-primary" : "text-muted-foreground"
                 )}
               >
                 {link.label}
@@ -93,11 +101,13 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             </Link>
 
             {/* Admin Button */}
-            <Link href={isAuthenticated ? "/admin/dashboard" : "/admin/login"}>
+            <Link href={isAuthenticated ? "/admin" : "/admin/login"}>
               <Button variant="ghost" size="sm">
                 <User className="h-5 w-5" />
                 <span className="hidden sm:inline ml-2">
-                  {isAuthenticated ? t("admin.dashboard") : t("common.adminLogin")}
+                  {isAuthenticated
+                    ? t("admin.dashboard")
+                    : t("common.adminLogin")}
                 </span>
               </Button>
             </Link>
@@ -124,14 +134,17 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
                         "text-lg font-medium transition-colors hover:text-primary",
-                        isActive(link.href) ? "text-primary" : "text-foreground",
+                        isActive(link.href) ? "text-primary" : "text-foreground"
                       )}
                     >
                       {link.label}
                     </Link>
                   ))}
                   <div className="pt-6 border-t">
-                    <Link href="/menu" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Link
+                      href="/menu"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       <Button className="w-full">{t("common.orderNow")}</Button>
                     </Link>
                   </div>
@@ -142,5 +155,5 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
         </nav>
       </PageContainer>
     </header>
-  )
+  );
 }

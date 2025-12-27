@@ -25,13 +25,16 @@ export function useCart() {
       const storedBonus = localStorage.getItem(FREE_BONUS_KEY);
       if (stored) {
         try {
-          setItems(JSON.parse(stored));
+          {
+          const parsed = JSON.parse(stored);
+          setItems(Array.isArray(parsed) ? parsed : []);
+        }
         } catch {
           setItems([]);
         }
       }
       if (storedBonus) {
-        setFreeBonusState(storedBonus as FreeBonus);
+        setFreeBonusState(storedBonus === "rice" || storedBonus === "naan" ? (storedBonus as FreeBonus) : null);
       }
       setIsLoaded(true);
     }
@@ -112,10 +115,10 @@ export function useCart() {
   const allMainDishes =
     items.length > 0 && items.every((item) => item.menuItem.isMainDish);
 
-  const eligibleForFreeBonus = allMainDishes && items.length > 0;
+  const eligibleForFreeBonus = allMainDishes && safeItems.length > 0;
 
   return {
-    items,
+    items: safeItems,
     addItem,
     removeItem,
     updateQuantity,

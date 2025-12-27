@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Geist_Mono, Inter, Playfair_Display } from "next/font/google";
 import type React from "react";
+import { AdminAuthProvider } from "./context/admin-auth-context";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -68,12 +69,15 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${playfair.variable} ${inter.variable} font-sans antialiased`}
         cz-shortcut-listen="true"
       >
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <AdminAuthProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </AdminAuthProvider>
 
         <Analytics />
       </body>

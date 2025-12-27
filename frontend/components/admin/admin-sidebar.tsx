@@ -1,25 +1,48 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useTranslations } from "next-intl"
-import { LayoutDashboard, ShoppingBag, CalendarDays, ChefHat, Settings, LogOut } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useAdminAuth } from "@/hooks/use-admin-auth"
-import { cn } from "@/lib/utils"
+import { useAdminAuth } from "@/app/context/admin-auth-context";
+import { Button } from "@/components/ui/button";
+// import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { cn } from "@/lib/utils";
+import {
+  CalendarDays,
+  ChefHat,
+  Combine,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  ShoppingBag,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function AdminSidebar() {
-  const t = useTranslations("admin")
-  const pathname = usePathname()
-  const { logout } = useAdminAuth()
+  const t = useTranslations("admin");
+  const pathname = usePathname();
+  const { logout } = useAdminAuth();
 
   const navItems = [
-    { href: "/admin/dashboard", label: t("dashboard"), icon: LayoutDashboard },
+    { href: "/admin", label: t("dashboard"), icon: LayoutDashboard },
+    {
+      href: "/admin/categories",
+      label: "categories",
+      icon: Combine,
+    },
+    {
+      href: "/admin/menu",
+      label: "menu",
+      icon: Combine,
+    },
     { href: "/admin/orders", label: t("orders"), icon: ShoppingBag },
-    { href: "/admin/reservations", label: t("reservations"), icon: CalendarDays },
+    {
+      href: "/admin/reservations",
+      label: t("reservations"),
+      icon: CalendarDays,
+    },
     { href: "/admin/catering", label: t("catering"), icon: ChefHat },
     { href: "/admin/settings", label: t("settings"), icon: Settings },
-  ]
+  ];
 
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-64 bg-sidebar text-sidebar-foreground hidden lg:flex flex-col">
@@ -32,7 +55,7 @@ export function AdminSidebar() {
 
       <nav className="flex-1 p-4 space-y-1">
         {navItems.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
@@ -41,13 +64,13 @@ export function AdminSidebar() {
                 "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
                 isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
               )}
             >
               <item.icon className="h-5 w-5" />
               <span className="font-medium">{item.label}</span>
             </Link>
-          )
+          );
         })}
       </nav>
 
@@ -62,5 +85,5 @@ export function AdminSidebar() {
         </Button>
       </div>
     </aside>
-  )
+  );
 }

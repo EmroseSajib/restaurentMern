@@ -40,9 +40,10 @@ function clearRefreshCookie(res: Response) {
 }
 
 export const adminLogin = asyncHandler(async (req: Request, res: Response) => {
+  console.log("Parsed data=======>>>>", req.body);
   const parsed = adminLoginSchema.safeParse(req.body);
   if (!parsed.success) throw new ApiError(400, "Invalid input");
-  console.log("Parsed data:", req.body);
+
   const result = await loginAdmin({
     ...parsed.data,
     userAgent: req.headers["user-agent"] ?? null,

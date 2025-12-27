@@ -1,41 +1,25 @@
-"use client"
+"use client";
 
-import useSWR from "swr"
-import {
-  getOpeningHours,
-  getDeliveryHours,
-  getSettings,
-  type OpeningHours,
-  type DeliveryHours,
-  type RestaurantSettings,
-} from "@/lib/api"
+import useSWR from "swr";
+import { getOpeningHours, getSettings, type WeeklyHours, type SettingsPayload } from "@/lib/api";
 
 export function useOpeningHours() {
-  const { data, error, isLoading } = useSWR<{ data: OpeningHours[] }>("opening-hours", () => getOpeningHours())
+  const { data, error, isLoading } = useSWR("opening-hours", () => getOpeningHours());
 
   return {
-    openingHours: data?.data || [],
+    openingHours: (data?.data as any)?.openingHours as WeeklyHours | undefined,
+    deliveryHours: (data?.data as any)?.deliveryHours as WeeklyHours | undefined,
     isLoading,
     error,
-  }
-}
-
-export function useDeliveryHours() {
-  const { data, error, isLoading } = useSWR<{ data: DeliveryHours[] }>("delivery-hours", () => getDeliveryHours())
-
-  return {
-    deliveryHours: data?.data || [],
-    isLoading,
-    error,
-  }
+  };
 }
 
 export function useSettings() {
-  const { data, error, isLoading } = useSWR<{ data: RestaurantSettings }>("settings", () => getSettings())
+  const { data, error, isLoading } = useSWR("settings", () => getSettings());
 
   return {
-    settings: data?.data,
+    settings: data?.data as SettingsPayload | undefined,
     isLoading,
     error,
-  }
+  };
 }

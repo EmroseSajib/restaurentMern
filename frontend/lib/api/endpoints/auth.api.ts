@@ -1,36 +1,53 @@
-import { apiClient, type ApiResponse } from "../client"
+import { apiClient, type ApiResponse } from "../client";
 
 export interface AdminUser {
-  _id: string
-  username: string
-  role: "admin" | "staff"
+  id: string;
+  username: string;
+  role: "admin";
 }
 
 export interface LoginCredentials {
-  username: string
-  password: string
+  username: string;
+  password: string;
 }
 
-export interface AuthResponse {
-  user: AdminUser
-  token: string
+export interface LoginResponseData {
+  admin: AdminUser;
+  accessToken: string;
 }
 
-export async function loginAdmin(credentials: LoginCredentials): Promise<ApiResponse<AuthResponse>> {
-  return apiClient.post<ApiResponse<AuthResponse>>("/auth/admin/login", credentials)
+const TOKEN_KEY = "adminAccessToken";
+
+export function getStoredAccessToken() {
+  return typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null;
 }
 
-export async function logoutAdmin(): Promise<ApiResponse<null>> {
-  return apiClient.post<ApiResponse<null>>("/auth/admin/logout")
+export function storeAccessToken(token: string | null) {
+  if (typeof window === "undefined") return;
+  if (token) localStorage.setItem(TOKEN_KEY, token);
+  else localStorage.removeItem(TOKEN_KEY);
 }
 
-export async function getCurrentAdmin(): Promise<ApiResponse<AdminUser>> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("adminToken") : null
-  return apiClient.get<ApiResponse<AdminUser>>("/auth/admin/me", {
+export async function loginAdmin(
+  credentials: LoginCredentials
+): Promise<ApiResponse<LoginResponseData>> {
+  return apiClient.post<ApiResponse<LoginResponseData>>("/admin/auth/login", credentials);
+}
+
+export async function refreshAdmin(): Promise<ApiResponse<LoginResponseData>> {
+  // refresh token is sent via httpOnly cookie (credentials: include in client)
+  return apiClient.post<ApiResponse<LoginResponseData>>("/admin/auth/refresh");
+}
+
+export async function logoutAdmin(): Promise<ApiResponse<{ ok: true }>> {
+  return apiClient.post<ApiResponse<{ ok: true }>>("/admin/auth/logout");
+}
+
+export async function getCurrentAdmin(
+  accessToken?: string | null
+): Promise<ApiResponse<{ admin: AdminUser }>> {
+  const token = accessToken ?? getStoredAccessToken();
+  return apiClient.get<ApiResponse<{ admin: AdminUser }>>("/admin/auth/me", {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
-  })
-}
-
-export async function verifyAdminToken(token: string): Promise<ApiResponse<AdminUser>> {
-  return apiClient.post<ApiResponse<AdminUser>>("/auth/admin/verify", { token })
+  });
 }

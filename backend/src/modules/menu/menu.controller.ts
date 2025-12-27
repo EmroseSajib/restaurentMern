@@ -31,6 +31,8 @@ export const getMenu = asyncHandler(async (req: Request, res: Response) => {
 
 export const createCategory = asyncHandler(
   async (req: AuthedAdminRequest, res: Response) => {
+    console.log("req.body=====>>>", req.body);
+
     const parsed = categoryCreateSchema.safeParse(req.body);
     if (!parsed.success) throw new ApiError(400, "Invalid input");
 

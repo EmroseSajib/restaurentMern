@@ -1,42 +1,46 @@
 "use client";
 
-import type React from "react";
-
+import { useAdminAuth } from "@/app/context/admin-auth-context";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { AdminTopbar } from "@/components/admin/admin-topbar";
 import { RealtimeProvider } from "@/components/admin/realtime-provider";
-import { Spinner } from "@/components/ui/spinner";
-import { useAdminAuth } from "@/hooks/use-admin-auth";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+// import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { usePathname, useRouter } from "next/navigation";
+import type React from "react";
 import { useEffect } from "react";
 
-interface AdminLayoutProps {
-  children: React.ReactNode;
-}
-
-export function AdminLayout({ children }: AdminLayoutProps) {
-  const t = useTranslations("admin");
+export function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, isLoading } = useAdminAuth();
+  console.log("isAuthenticated======>>>", isAuthenticated);
+
+  // ✅ IMPORTANT FIX
+  const isLoginPage = pathname.endsWith("/admin/login");
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/admin/login");
-    }
-  }, [isAuthenticated, isLoading, router]);
+    if (isLoading) return;
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Spinner className="h-8 w-8" />
-      </div>
-    );
+    // not logged in → redirect to login
+    if (!isAuthenticated && !isLoginPage) {
+      router.replace("/admin/login");
+      return;
+    }
+
+    // logged in → prevent staying on login
+    if (isAuthenticated && isLoginPage) {
+      router.replace("/admin");
+    }
+  }, [isAuthenticated, isLoading, isLoginPage, router]);
+
+  if (isLoading) return null;
+
+  // show ONLY login page (no sidebar/topbar)
+  if (!isAuthenticated && isLoginPage) {
+    return <>{children}</>;
   }
 
-  // if (!isAuthenticated) {
-  //   return null
-  // }
+  if (!isAuthenticated) return null;
 
   return (
     <RealtimeProvider>

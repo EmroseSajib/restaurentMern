@@ -11,11 +11,30 @@ import {
   type LoginCredentials,
 } from "@/lib/api";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-export function useAdminAuth() {
+type AdminAuthContextValue = {
+  user: AdminUser | null;
+  isLoading: boolean;
+  error: string | null;
+  isAuthenticated: boolean;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
+};
+
+const AdminAuthContext = createContext<AdminAuthContextValue | null>(null);
+
+export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AdminUser | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -32,11 +51,11 @@ export function useAdminAuth() {
 
     try {
       const me = await getCurrentAdmin(token);
+      // adjust if your backend returns different shape
       setUser(me.data.admin);
     } catch {
-      // try refresh once (cookie)
       try {
-        const refreshed = await refreshAdmin();
+        const refreshed = await refreshAdmin(); // uses httpOnly cookie
         storeAccessToken(refreshed.data.accessToken);
         setUser(refreshed.data.admin);
       } catch {
@@ -59,15 +78,14 @@ export function useAdminAuth() {
 
       try {
         const res = await loginAdmin(credentials);
+
         storeAccessToken(res.data.accessToken);
         setUser(res.data.admin);
-        console.log("user========>>>>>", res.data);
 
-        // ✅ send them to dashboard
         router.replace("/admin");
       } catch (err) {
-        setUser(null);
         storeAccessToken(null);
+        setUser(null);
         setError(err instanceof Error ? err.message : "Login failed");
         throw err;
       } finally {
@@ -78,28 +96,43 @@ export function useAdminAuth() {
   );
 
   const logout = useCallback(async () => {
-    // ✅ immediately update UI state so layout allows /admin/login
+    // instant UI update
     setUser(null);
     setError(null);
     storeAccessToken(null);
 
     try {
-      await logoutAdmin(); // best-effort
+      await logoutAdmin(); // must include credentials: "include"
     } catch {
       // ignore
     } finally {
-      // ✅ redirect to admin login (not "/")
       router.replace("/admin/login");
     }
   }, [router]);
 
-  return {
-    user,
-    isLoading,
-    error,
-    isAuthenticated: !!user, // derived from user
-    login,
-    logout,
-    checkAuth,
-  };
+  const value = useMemo(
+    () => ({
+      user,
+      isLoading,
+      error,
+      isAuthenticated: !!user,
+      login,
+      logout,
+      checkAuth,
+    }),
+    [user, isLoading, error, login, logout, checkAuth]
+  );
+
+  return (
+    <AdminAuthContext.Provider value={value}>
+      {children}
+    </AdminAuthContext.Provider>
+  );
+}
+
+export function useAdminAuth() {
+  const ctx = useContext(AdminAuthContext);
+  if (!ctx)
+    throw new Error("useAdminAuth must be used inside AdminAuthProvider");
+  return ctx;
 }
