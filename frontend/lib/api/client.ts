@@ -1,5 +1,4 @@
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface ApiError {
   message: string;
