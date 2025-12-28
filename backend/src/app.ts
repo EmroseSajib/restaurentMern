@@ -33,7 +33,7 @@ export function createApp() {
       credentials: true,
     })
   );
-  app.options("*", cors());
+  app.options("/*", cors());
 
   app.post("/v1/webhooks/stripe", express.raw({ type: "application/json" }));
 
