@@ -24,7 +24,6 @@ export default function AdminMenuItemsPage() {
   const [descDe, setDescDe] = useState("");
 
   const [amount, setAmount] = useState<number>(1299);
-  const [currency, setCurrency] = useState("EUR");
 
   const [available, setAvailable] = useState(true);
   const [isMainDish, setIsMainDish] = useState(true);
@@ -46,20 +45,9 @@ export default function AdminMenuItemsPage() {
       descEn.trim() &&
       descNl.trim() &&
       descDe.trim() &&
-      Number.isFinite(amount) &&
-      currency.trim().length > 0
+      Number.isFinite(amount)
     );
-  }, [
-    categoryId,
-    nameEn,
-    nameNl,
-    nameDe,
-    descEn,
-    descNl,
-    descDe,
-    amount,
-    currency,
-  ]);
+  }, [categoryId, nameEn, nameNl, nameDe, descEn, descNl, descDe, amount]);
 
   async function onCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -68,7 +56,7 @@ export default function AdminMenuItemsPage() {
       categoryId,
       name: { en: nameEn.trim(), nl: nameNl.trim(), de: nameDe.trim() },
       description: { en: descEn.trim(), nl: descNl.trim(), de: descDe.trim() },
-      price: { amount: Number(amount), currency: currency.trim() },
+      price: Number(amount),
       available,
       isMainDish,
       spicy,
@@ -204,16 +192,6 @@ export default function AdminMenuItemsPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Currency</label>
-              <Input
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                required
-              />
-            </div>
-
-            {/* Image URL */}
-            <div className="space-y-2 md:col-span-2">
               <label className="text-sm font-medium">
                 Image URL (optional)
               </label>
@@ -287,9 +265,8 @@ export default function AdminMenuItemsPage() {
                   <div>
                     <div className="font-medium">{it.name?.en ?? "-"}</div>
                     <div className="text-xs text-muted-foreground">
-                      {it.price?.amount} {it.price?.currency} •{" "}
-                      {it.available ? "available" : "unavailable"} •{" "}
-                      {it.isMainDish ? "main dish" : "other"}
+                      {it.price} • {it.available ? "available" : "unavailable"}{" "}
+                      • {it.isMainDish ? "main dish" : "other"}
                     </div>
                   </div>
                   <div className="text-xs text-muted-foreground">{it.id}</div>

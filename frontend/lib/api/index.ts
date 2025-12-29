@@ -2,7 +2,7 @@ export * from "./client";
 export * from "./endpoints/auth.api";
 export * from "./endpoints/catering.api";
 export * from "./endpoints/membership.api";
-export * from "./endpoints/menu.api";
+export * from "./endpoints/public-menu.api";
 export * from "./endpoints/order.api";
 export * from "./endpoints/reservation.api";
 export * from "./endpoints/settings.api";

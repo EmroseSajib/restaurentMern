@@ -3,11 +3,6 @@ import { getStoredAccessToken } from "./auth.api";
 
 export type LocalizedText = { en: string; nl: string; de: string };
 
-export type Money = {
-  amount: number; // usually cents (e.g. 1299 = €12.99)
-  currency: string; // "EUR"
-};
-
 export type MenuItem = {
   id: string;
   categoryId: string;
@@ -15,7 +10,7 @@ export type MenuItem = {
   name: LocalizedText;
   description: LocalizedText;
 
-  price: Money;
+  price: number;
 
   available: boolean;
   isMainDish: boolean;

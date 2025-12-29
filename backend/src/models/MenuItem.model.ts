@@ -1,13 +1,5 @@
 import mongoose, { Schema, type InferSchemaType } from "mongoose";
 
-const MoneySchema = new Schema(
-  {
-    amount: { type: Number, required: true, min: 0 }, // cents
-    currency: { type: String, required: true, default: "EUR" },
-  },
-  { _id: false }
-);
-
 const MenuItemSchema = new Schema(
   {
     categoryId: {
@@ -30,8 +22,7 @@ const MenuItemSchema = new Schema(
 
     imageUrl: { type: String, default: "" },
 
-    price: { type: MoneySchema, required: true },
-
+    price: { type: Number, required: true, min: 0 },
     available: { type: Boolean, default: true },
 
     // your frontend flags

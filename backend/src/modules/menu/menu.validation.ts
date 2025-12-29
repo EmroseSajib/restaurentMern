@@ -55,10 +55,7 @@ export const menuItemCreateSchema = z.object({
     })
     .optional(),
   imageUrl: z.string().url().optional(),
-  price: z.object({
-    amount: z.number().int().min(0),
-    currency: z.string().min(3).max(3).default("EUR").optional(),
-  }),
+  price: z.number().int().min(0),
 
   available: z.boolean().optional(),
   isMainDish: z.boolean().optional(),
