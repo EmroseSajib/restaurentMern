@@ -7,6 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ShieldPlus } from "lucide-react";
+
 import { restaurantInfo } from "@/lib/data/restaurant";
 import { useI18n } from "@/lib/i18n/context";
 import type { Locale } from "@/lib/i18n/translations";
@@ -45,7 +47,6 @@ export function Header() {
     { href: "/reservation", label: t.nav.reservation },
     { href: "/gift-voucher", label: t.nav.giftVoucher },
     { href: "/about", label: t.nav.about },
-    { href: "/gallery", label: t.nav.gallery },
   ];
 
   const currentLang = languages.find((l) => l.code === locale) || languages[1];
@@ -129,6 +130,19 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/admin/login"
+              className={cn(
+                "font-medium transition-colors relative py-1",
+                isScrolled
+                  ? "text-foreground hover:text-amber-600"
+                  : "text-foreground hover:text-amber-600",
+                pathname === "/admin/login" &&
+                  "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-amber-500"
+              )}
+            >
+              <ShieldPlus />
+            </Link>
           </div>
 
           {/* Right side actions */}
