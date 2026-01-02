@@ -1,15 +1,20 @@
-import createNextIntlPlugin from "next-intl/plugin"
-
-const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    unoptimized: true,
-  },
-}
 
-export default withNextIntl(nextConfig)
+  images: {
+    unoptimized: true, // optional (keeps <Image> as plain <img>)
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "4000",
+        pathname: "/uploads/**",
+      },
+    ],
+  },
+};
+
+export default nextConfig;

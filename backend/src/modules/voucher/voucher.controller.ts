@@ -21,6 +21,8 @@ export const postValidateVoucher = asyncHandler(
 export const postCreateVoucher = asyncHandler(
   async (req: AuthedAdminRequest, res: Response) => {
     const parsed = voucherCreateSchema.safeParse(req.body);
+    console.log("req======>>>>>", req.body);
+
     if (!parsed.success) throw new ApiError(400, "Invalid input");
 
     const data = await adminCreateVoucher(parsed.data);

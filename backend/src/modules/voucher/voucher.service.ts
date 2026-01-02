@@ -16,7 +16,7 @@ export async function validateVoucher(input: {
   const code = input.code.toUpperCase();
 
   const v = await VoucherModel.findOne({ code }).lean();
-  if (!v || !v.isActive) throw new ApiError(404, "Voucher not found");
+  if (!v || !v.isActive) throw new ApiError(400, "Voucher not found");
 
   if (!nowOk(v.startsAt ?? null, v.endsAt ?? null))
     throw new ApiError(400, "Voucher not active");

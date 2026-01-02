@@ -1,43 +1,41 @@
-import { AboutSection } from "@/components/home/about-section";
-import { HomeHero } from "@/components/home/home-hero";
-import { HoursSection } from "@/components/home/hours-section";
-import { SpecialOffers } from "@/components/home/special-offers";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
-import { Toaster } from "@/components/ui/toaster";
-import type { Locale } from "@/i18n/config";
-import { getLocale, getTranslations } from "next-intl/server";
+import type { Metadata } from "next"
+import { OccasionBanner } from "@/components/ui/occasion-banner"
+import { HeroSection } from "@/components/home/hero-section"
+import { HighlightsSection } from "@/components/home/highlights-section"
+import { PopularDishesSection } from "@/components/home/popular-dishes-section"
+import { HoursSection } from "@/components/home/hours-section"
+import { LocationSection } from "@/components/home/location-section"
+import { TestimonialsSection } from "@/components/home/testimonials-section"
+import { CTASection } from "@/components/home/cta-section"
 
-export async function generateMetadata() {
-  const t = await getTranslations();
-  return {
-    title: "dekleineman - Authentic Indian Restaurant",
-    description: t("home.heroSubtitle"),
-    alternates: {
-      languages: {
-        en: "/",
-        nl: "/",
-        de: "/",
-      },
-    },
-  };
+export const metadata: Metadata = {
+  title: "dekleineman | Authentic Indian Restaurant in Doetinchem",
+  description:
+    "Experience authentic Indian cuisine at dekleineman in Doetinchem, Netherlands. Order online, reserve a table, or visit us for traditional tandoori, curries, and more.",
 }
 
-export default async function HomePage() {
-  const locale = (await getLocale()) as Locale;
-
+export default function HomePage() {
   return (
     <>
-      <SiteHeader locale={locale} />
-      <main>
-        <HomeHero />
-        {/* <FeaturedDishes /> */}
-        <SpecialOffers />
-        <HoursSection />
-        <AboutSection />
-      </main>
-      <SiteFooter />
-      <Toaster />
+      {/* Occasion banner - configurable */}
+      <div className="pt-16 lg:pt-24">
+        <OccasionBanner
+          isActive={true}
+          occasion="default"
+          // To change the banner, modify these props:
+          // isActive={false} to hide
+          // occasion="christmas" or "valentine" for other messages
+          // customMessage="Your custom message here" for custom text
+        />
+      </div>
+
+      <HeroSection />
+      <HighlightsSection />
+      <PopularDishesSection />
+      <CTASection />
+      <HoursSection />
+      <LocationSection />
+      <TestimonialsSection />
     </>
-  );
+  )
 }
