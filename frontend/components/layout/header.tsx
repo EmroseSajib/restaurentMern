@@ -132,16 +132,9 @@ export function Header() {
             ))}
             <Link
               href="/admin/login"
-              className={cn(
-                "font-medium transition-colors relative py-1",
-                isScrolled
-                  ? "text-foreground hover:text-amber-600"
-                  : "text-foreground hover:text-amber-600",
-                pathname === "/admin/login" &&
-                  "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-amber-500"
-              )}
+              className={cn("font-medium transition-colors relative py-1")}
             >
-              <ShieldPlus />
+              <ShieldPlus className="text-amber-500" />
             </Link>
           </div>
 

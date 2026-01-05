@@ -15,36 +15,22 @@ export async function POST(req) {
 
   const data = await res.json().catch(() => null);
 
-  // If login failed, just return error to client
   if (!res.ok || !data?.success) {
     return NextResponse.json(
       data ?? { success: false, message: "Login failed" },
-      {
-        status: res.status || 401,
-      }
+      { status: res.status || 401 }
     );
   }
 
   const token = data?.data?.accessToken;
 
-  // Return response AND set token as httpOnly cookie
-  const response = NextResponse.json(
+  // ✅ send token to client so client can store in localStorage
+  return NextResponse.json(
     {
       success: true,
-      admin: data.data.admin, // send admin info to client if you want
+      token,
+      admin: data.data.admin,
     },
     { status: 200 }
   );
-
-  // httpOnly cookie = not accessible from JS (secure)
-  response.cookies.set("admin_access_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    // optional: set maxAge to match your JWT expiry (example: 1 day)
-    maxAge: 60 * 60 * 24,
-  });
-
-  return response;
 }
