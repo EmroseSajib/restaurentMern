@@ -6,6 +6,7 @@ const router = Router();
 
 router.post("/validate", postValidateVoucher);
 
+
 // admin
 router.post("/", requireAdmin, postCreateVoucher);
 

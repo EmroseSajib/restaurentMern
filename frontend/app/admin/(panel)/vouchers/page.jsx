@@ -60,13 +60,6 @@ export default function NewVoucherPage() {
     setError("");
     setResult(null);
 
-    const token = localStorage.getItem("admin_access_token");
-    if (!token) {
-      setError("Session expired. Please log in again.");
-      setLoading(false);
-      return;
-    }
-
     const payload = {
       code: form.code,
       type: form.type,
@@ -79,12 +72,9 @@ export default function NewVoucherPage() {
     };
 
     try {
-      const res = await fetch("http://localhost:4000/v1/vouchers", {
+      const res = await fetch("/api/vouchers", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ send token
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 

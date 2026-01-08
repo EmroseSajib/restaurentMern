@@ -189,30 +189,38 @@
 //     </div>
 //   );
 // }
-export const dynamic = "force-dynamic"; // ensures no caching
+import AdminDashboardView from "@/components/admin/AdminDashboardView";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-async function getStats() {
-  const res = await fetch("http://localhost:4000/v1/api/admin/dashboard/stats", {
+export const dynamic = "force-dynamic"; // no cache
+
+async function getDashboardStats() {
+  const cookieStore = await cookies(); // Next 16: async
+  const token = cookieStore.get("admin_access_token")?.value;
+
+  if (!token) redirect("/admin/login");
+
+  const res = await fetch("http://localhost:4000/v1/admin/dashboard/stats", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     cache: "no-store",
   });
 
-  // if unauthorized or error
-  if (!res.ok) return null;
+  const data = await res.json().catch(() => ({}));
 
-  return res.json();
+  if (res.status === 401) redirect("/admin/login");
+  if (!res.ok || data?.success === false) {
+    throw new Error(data?.message || "Failed to load dashboard stats");
+  }
+
+  return data;
 }
 
 export default async function AdminDashboardPage() {
-  const stats = await getStats();
-
-  if (!stats?.success) {
-    return <div className="text-red-600">Failed to load dashboard</div>;
-  }
-
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <pre className="mt-4 text-sm">{JSON.stringify(stats, null, 2)}</pre>
-    </div>
-  );
+  const data = await getDashboardStats();
+  console.log("Dashboard Data:", data);
+  return <AdminDashboardView data={data} />;
 }

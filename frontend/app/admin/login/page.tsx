@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
       }
 
       // ✅ save token in localStorage
-      localStorage.setItem("admin_access_token", data.token);
+      // localStorage.setItem("admin_access_token", data.token);
 
       router.push("/admin");
     } catch (err) {

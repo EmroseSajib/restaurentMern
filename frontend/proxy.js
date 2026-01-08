@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 
 export function proxy(req) {
-  const token = req.cookies.get("admin_access_token")?.value;
+  const pathname = req.nextUrl.pathname;
 
-  // protect all /admin pages except /admin/login
-  if (
-    req.nextUrl.pathname.startsWith("/admin") &&
-    req.nextUrl.pathname !== "/admin/login"
-  ) {
+  // allow login page
+  if (pathname === "/admin/login") return NextResponse.next();
+
+  // protect admin routes
+  if (pathname.startsWith("/admin")) {
+    const token = req.cookies.get("admin_access_token")?.value;
+
     if (!token) {
       const url = req.nextUrl.clone();
       url.pathname = "/admin/login";

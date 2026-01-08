@@ -1,17 +1,13 @@
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
 import { getRestaurantJsonLd, restaurantInfo } from "@/lib/data/restaurant";
-import { I18nProvider } from "@/lib/i18n/context";
-import { Analytics } from "@vercel/analytics/next";
-import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import type React from "react";
-import FloatingPortfolioChatbot from "../components/chatBot/PortfolioChatbot";
 import "./globals.css";
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+});
 
-export const metadata: Metadata = {
+export const metadata = {
   title: {
     default: "Dekleineman | Authentic Indian Restaurant in Doetinchem",
     template: "%s | dekleineman",
@@ -65,7 +61,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
+export const viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f59e0b" },
     { media: "(prefers-color-scheme: dark)", color: "#78350f" },
@@ -74,11 +70,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }) {
   return (
     <html lang="nl">
       <head>
@@ -90,16 +82,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased min-h-screen flex flex-col">
-        <I18nProvider>
-          <Header />
-          <main className="flex-1">
-            {children}
-            <FloatingPortfolioChatbot />
-          </main>
-          <Footer />
-        </I18nProvider>
-        <Analytics />
+
+      <body
+        className={`${geist.variable} ${geistMono.variable} font-sans antialiased min-h-screen flex flex-col`}
+      >
+        {children}
       </body>
     </html>
   );

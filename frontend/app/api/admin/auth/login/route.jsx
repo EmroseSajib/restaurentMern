@@ -21,16 +21,19 @@ export async function POST(req) {
       { status: res.status || 401 }
     );
   }
-
   const token = data?.data?.accessToken;
-
-  // ✅ send token to client so client can store in localStorage
-  return NextResponse.json(
-    {
-      success: true,
-      token,
-      admin: data.data.admin,
-    },
+  // ✅ create response and set cookie
+  const response = NextResponse.json(
+    { success: true, admin: data?.data?.admin }, // you can also include token if you want
     { status: 200 }
   );
+
+  response.cookies.set("admin_access_token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24, // 1 day
+  });
+  return response;
 }
