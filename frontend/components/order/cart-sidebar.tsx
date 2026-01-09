@@ -40,6 +40,7 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
     voucherDiscount,
     updateQuantity,
     removeItem,
+    discountAmount,
     setDeliveryType,
     applyVoucher,
     removeVoucher,
@@ -80,7 +81,7 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
       });
     }
   };
-
+  console.log("voucherDiscount=====>>>", discountAmount);
   return (
     <Card className="shadow-xl border-amber-200">
       <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-t-lg">

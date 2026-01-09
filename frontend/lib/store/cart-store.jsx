@@ -182,7 +182,7 @@ export const useCartStore = create()(
     (set, get) => ({
       items: [],
       deliveryType: "delivery",
-
+      discountAmount: 0,
       voucherCode: null,
       voucherDiscount: 0, // numeric discount value from backend
       voucherType: null, // "fixed" | "percent" (store it to calculate correctly)
@@ -248,6 +248,7 @@ export const useCartStore = create()(
           set({
             voucherCode: null,
             voucherDiscount: 0,
+            discountAmount: 0,
             voucherType: null,
             voucherMessage: result.message,
           });
