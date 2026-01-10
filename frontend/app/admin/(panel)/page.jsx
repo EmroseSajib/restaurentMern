@@ -200,8 +200,10 @@ async function getDashboardStats() {
   const token = cookieStore.get("admin_access_token")?.value;
 
   if (!token) redirect("/admin/login");
+  const base = process.env.API_BASE_URL;
+  const url = new URL("/v1/admin/dashboard/stats", base);
 
-  const res = await fetch("http://localhost:4000/v1/admin/dashboard/stats", {
+  const res = await fetch(url, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
