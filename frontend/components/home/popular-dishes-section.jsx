@@ -1,28 +1,32 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { MenuItemCard } from "@/components/menu/menu-item-card"
-import { useI18n } from "@/lib/i18n/context"
-import { getPopularItems } from "@/lib/data/menu"
+import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n/context";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { MenuItemCard } from "../menu/menu-item-card";
+// import { getPopularItems } from "@/lib/data/menu"
 
-export function PopularDishesSection() {
-  const { t } = useI18n()
-  const popularItems = getPopularItems().slice(0, 6)
+export function PopularDishesSection({ items = [] }) {
+  const { t } = useI18n();
+  // const popularItems = getPopularItems().slice(0, 6)
 
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         {/* Section header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3">{t.popularDishes.title}</h2>
-          <p className="text-lg text-amber-700/80">{t.popularDishes.subtitle}</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3">
+            {t.popularDishes.title}
+          </h2>
+          <p className="text-lg text-amber-700/80">
+            {t.popularDishes.subtitle}
+          </p>
         </div>
 
         {/* Dishes grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {popularItems.map((item) => (
+          {items?.map((item) => (
             <MenuItemCard key={item.id} item={item} />
           ))}
         </div>
@@ -42,5 +46,5 @@ export function PopularDishesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

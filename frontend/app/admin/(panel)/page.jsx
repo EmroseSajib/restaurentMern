@@ -223,6 +223,6 @@ async function getDashboardStats() {
 
 export default async function AdminDashboardPage() {
   const data = await getDashboardStats();
-  console.log("Dashboard Data:", data);
+
   return <AdminDashboardView data={data} />;
 }

@@ -54,7 +54,7 @@ export const translations = {
     },
     // Popular Dishes
     popularDishes: {
-      title: "Popular Dishes",
+      title: "Main Courses",
       subtitle: "Our guests' favorites",
       orderNow: "Order Now",
       addToCart: "Add to Cart",
@@ -337,7 +337,7 @@ export const translations = {
     },
     // Popular Dishes
     popularDishes: {
-      title: "Populaire Gerechten",
+      title: "Hoofdgerechten",
       subtitle: "Favorieten van onze gasten",
       orderNow: "Nu Bestellen",
       addToCart: "Toevoegen",
@@ -624,7 +624,7 @@ export const translations = {
     },
     // Popular Dishes
     popularDishes: {
-      title: "Beliebte Gerichte",
+      title: "Hauptgerichte",
       subtitle: "Lieblinge unserer Gäste",
       orderNow: "Jetzt Bestellen",
       addToCart: "Hinzufügen",

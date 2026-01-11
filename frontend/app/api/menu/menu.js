@@ -27,3 +27,16 @@ export function localizeText(obj, locale) {
   if (typeof obj === "object") return obj?.[locale] ?? obj?.en ?? "";
   return "";
 }
+export async function getMainCourses() {
+  const base = process.env.API_BASE_URL;
+
+  const res = await fetch(`${base}/v1/menu?category=main-courses`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch main courses");
+  }
+
+  return res.json();
+}
