@@ -2,7 +2,11 @@ import type { Request, Response } from "express";
 import type { AuthedAdminRequest } from "../../middlewares/auth.middleware";
 import { ApiError } from "../../utils/apiError";
 import { asyncHandler } from "../../utils/asyncHandler";
-import { adminCreateVoucher, validateVoucher } from "./voucher.service";
+import {
+  adminCreateVoucher,
+  adminGetAllVouchers,
+  validateVoucher,
+} from "./voucher.service";
 import {
   validateVoucherSchema,
   voucherCreateSchema,
@@ -27,5 +31,15 @@ export const postCreateVoucher = asyncHandler(
 
     const data = await adminCreateVoucher(parsed.data);
     res.status(201).json({ success: true, data });
+  }
+);
+export const getAllVouchers = asyncHandler(
+  async (req: AuthedAdminRequest, res: Response) => {
+    const data = await adminGetAllVouchers();
+
+    res.json({
+      success: true,
+      data,
+    });
   }
 );

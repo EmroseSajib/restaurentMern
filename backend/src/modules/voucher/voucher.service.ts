@@ -70,3 +70,9 @@ export async function adminCreateVoucher(input: any) {
 
   return { id: String(created._id) };
 }
+
+export const adminGetAllVouchers = async () => {
+  const vouchers = await VoucherModel.find().sort({ createdAt: -1 });
+
+  return vouchers;
+};
