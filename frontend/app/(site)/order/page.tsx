@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import { OrderPageContent } from "@/components/order/order-page-content"
+import { OrderPageContent } from "@/components/order/order-page-content";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Order Online",
@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     title: "Order Online | dekleineman",
     description: "Order authentic Indian food online for delivery or pickup.",
   },
-}
+};
 
 export default function OrderPage() {
-  return <OrderPageContent />
+  return <OrderPageContent />;
 }

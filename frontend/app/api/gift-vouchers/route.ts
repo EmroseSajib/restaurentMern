@@ -1,4 +1,5 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
 // ===========================================
 // GIFT VOUCHER API ROUTE
@@ -6,26 +7,34 @@ import { type NextRequest, NextResponse } from "next/server"
 // ===========================================
 
 interface VoucherData {
-  amount: number
-  voucherCode: string
-  recipientName: string
-  recipientEmail: string
-  message: string
-  buyerName: string
-  buyerEmail: string
+  amount: number;
+  voucherCode: string;
+  recipientName: string;
+  recipientEmail: string;
+  message: string;
+  buyerName: string;
+  buyerEmail: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const data: VoucherData = await request.json()
+    const data: VoucherData = await request.json();
 
     // Validate required fields
     if (!data.amount || data.amount < 10) {
-      return NextResponse.json({ error: "Invalid amount" }, { status: 400 })
+      return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
     }
 
-    if (!data.recipientName || !data.recipientEmail || !data.buyerName || !data.buyerEmail) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    if (
+      !data.recipientName ||
+      !data.recipientEmail ||
+      !data.buyerName ||
+      !data.buyerEmail
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     // ===========================================
@@ -34,15 +43,15 @@ export async function POST(request: NextRequest) {
     // Process payment before generating voucher:
     //
     // STRIPE EXAMPLE:
-    // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-    // const paymentIntent = await stripe.paymentIntents.create({
-    //   amount: Math.round(data.amount * 100),
-    //   currency: 'eur',
-    //   metadata: {
-    //     voucherCode: data.voucherCode,
-    //     recipientEmail: data.recipientEmail,
-    //   },
-    // })
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(data.amount * 100),
+      currency: "eur",
+      metadata: {
+        voucherCode: data.voucherCode,
+        recipientEmail: data.recipientEmail,
+      },
+    });
 
     // ===========================================
     // TODO: DATABASE STORAGE
@@ -98,16 +107,19 @@ export async function POST(request: NextRequest) {
       amount: data.amount,
       recipient: data.recipientEmail,
       buyer: data.buyerEmail,
-    })
+    });
 
     return NextResponse.json({
       success: true,
       voucherCode: data.voucherCode,
       message: "Voucher created successfully",
-    })
+    });
   } catch (error) {
-    console.error("Voucher error:", error)
-    return NextResponse.json({ error: "Failed to create voucher" }, { status: 500 })
+    console.error("Voucher error:", error);
+    return NextResponse.json(
+      { error: "Failed to create voucher" },
+      { status: 500 }
+    );
   }
 }
 
@@ -116,11 +128,14 @@ export async function POST(request: NextRequest) {
 // ===========================================
 // This endpoint would validate and apply vouchers during checkout
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const code = searchParams.get("code")
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get("code");
 
   if (!code) {
-    return NextResponse.json({ error: "Voucher code required" }, { status: 400 })
+    return NextResponse.json(
+      { error: "Voucher code required" },
+      { status: 400 }
+    );
   }
 
   // ===========================================
@@ -153,18 +168,18 @@ export async function GET(request: NextRequest) {
   const mockVouchers: Record<string, number> = {
     GIFT25: 25,
     GIFT50: 50,
-  }
+  };
 
-  const upperCode = code.toUpperCase()
+  const upperCode = code.toUpperCase();
   if (mockVouchers[upperCode]) {
     return NextResponse.json({
       valid: true,
       balance: mockVouchers[upperCode],
-    })
+    });
   }
 
   return NextResponse.json({
     valid: false,
     error: "Invalid voucher code",
-  })
+  });
 }

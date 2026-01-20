@@ -9,13 +9,13 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { items, customer, deliveryType, total, paymentMethod } = body;
-
+    console.log("Creating checkout session with body:", body);
     const line_items = items.map(
       ({ item, quantity }: { item: any; quantity: number }) => ({
         price_data: {
           currency: "eur",
           product_data: { name: item.name.en },
-          unit_amount: Math.round(item.price * 100),
+          unit_amount: Math.round(total),
         },
         quantity,
       })

@@ -1,7 +1,9 @@
+import Stripe from "stripe";
 import { pusher } from "../../config/pusher";
 import { MenuItemModel } from "../../models/MenuItem.model";
 import { OrderModel } from "../../models/Order.model";
 import { ApiError } from "../../utils/apiError";
+import { generateOrderNumber } from "../../utils/orderNumber";
 import { validateMembership } from "../membership/membership.service";
 import { validateVoucher } from "../voucher/voucher.service";
 
@@ -109,7 +111,7 @@ export async function createOrder(input: {
 
   const total = Math.max(
     0,
-    subtotal - discountTotal.amount + bonusPrice.amount
+    subtotal - discountTotal.amount + bonusPrice.amount,
   );
 
   const orderNumber = genOrderNumber();
@@ -192,3 +194,110 @@ export async function getOrderById(id: string) {
     createdAt: order.createdAt,
   };
 }
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2024-06-20" as any,
+});
+
+function badRequest(message: string) {
+  const err: any = new Error(message);
+  err.status = 400;
+  return err;
+}
+
+export const OrdersService = {
+  async createCodOrder(payload: any) {
+    const { customer, fulfillment, items, bonus, discounts, totals } = payload;
+
+    if (!items?.length) throw badRequest("Cart is empty");
+
+    const orderNumber = generateOrderNumber();
+
+    const order = await OrderModel.create({
+      orderNumber,
+      customer,
+      fulfillment,
+      items,
+      bonus: bonus || { type: "none", price: 0 },
+      discounts: discounts || {
+        voucherCode: "",
+        membershipId: "",
+        discountTotal: 0,
+      },
+      totals,
+      payment: { method: "cod", status: "pending", stripeSessionId: "" },
+      status: "new",
+    });
+
+    return { orderNumber: order.orderNumber, orderId: order._id };
+  },
+
+  async createStripeCheckout(payload: any) {
+    const {
+      customer,
+      fulfillment,
+      items,
+      bonus,
+      discounts,
+      totals,
+      paymentMethod,
+    } = payload;
+
+    if (!items?.length) throw badRequest("Cart is empty");
+    if (paymentMethod !== "card" && paymentMethod !== "ideal")
+      throw badRequest("Invalid payment method");
+
+    const orderNumber = generateOrderNumber();
+
+    // create order pending
+    const order = await OrderModel.create({
+      orderNumber,
+      customer,
+      fulfillment,
+      items,
+      bonus: bonus || { type: "none", price: 0 },
+      discounts: discounts || {
+        voucherCode: "",
+        membershipId: "",
+        discountTotal: 0,
+      },
+      totals,
+      payment: { method: "stripe", status: "pending", stripeSessionId: "" },
+      status: "new",
+    });
+
+    const line_items = items.map((it: any) => ({
+      quantity: Number(it.quantity || 1),
+      price_data: {
+        currency: "eur",
+        unit_amount: Math.round(Number(it.unitPrice || 0) * 100),
+        product_data: {
+          name: it.nameSnapshot?.en || "Item",
+        },
+      },
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: paymentMethod === "ideal" ? ["ideal"] : ["card"],
+      customer_email: customer?.email || undefined,
+
+      line_items,
+
+      success_url: `${process.env.FRONTEND_URL}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${
+        process.env.FRONTEND_URL
+      }/order/cancelled?orderNumber=${encodeURIComponent(orderNumber)}`,
+
+      metadata: {
+        orderId: String(order._id),
+        orderNumber: orderNumber,
+      },
+    });
+
+    order.payment.stripeSessionId = session.id;
+    await order.save();
+
+    return { url: session.url, orderNumber };
+  },
+};

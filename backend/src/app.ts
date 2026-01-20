@@ -7,7 +7,6 @@ import morgan from "morgan";
 import { env } from "./config/env";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import routes from "./routes";
-
 export function createApp() {
   const app = express();
   const allowedOrigins = [
@@ -29,10 +28,8 @@ export function createApp() {
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
-    })
+    }),
   );
-
-  app.post("/v1/webhooks/stripe", express.raw({ type: "application/json" }));
 
   app.use(compression());
   app.use(express.json({ limit: "1mb" }));
@@ -40,7 +37,7 @@ export function createApp() {
   app.use(cookieParser());
 
   app.get("/health", (_req, res) =>
-    res.json({ ok: true, name: "dekleineman-api" })
+    res.json({ ok: true, name: "dekleineman-api" }),
   );
 
   app.use("/v1", routes);

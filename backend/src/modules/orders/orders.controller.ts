@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { ApiError } from "../../utils/apiError";
 import { asyncHandler } from "../../utils/asyncHandler";
-import { createOrder, getOrderById } from "./orders.service";
+import { createOrder, getOrderById, OrdersService } from "./orders.service";
 import { createOrderSchema, orderIdParamSchema } from "./orders.validation";
 import { createStripeCheckoutSession } from "./stripe.service";
 
@@ -37,5 +37,33 @@ export const postStripeCheckout = asyncHandler(
 
     const data = await createStripeCheckoutSession(parsed.data.id);
     res.json({ success: true, data });
+  }
+);
+
+export const OrdersControllerCash = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const result = await OrdersService.createCodOrder(req.body);
+      return res.json({ success: true, data: result });
+    } catch (e: any) {
+      return res.status(e.status || 500).json({
+        success: false,
+        message: e.message || "COD failed",
+      });
+    }
+  }
+);
+
+export const OrdersControllerStripe = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const result = await OrdersService.createStripeCheckout(req.body);
+      return res.json({ success: true, data: result });
+    } catch (e: any) {
+      return res.status(e.status || 500).json({
+        success: false,
+        message: e.message || "Stripe checkout failed",
+      });
+    }
   }
 );

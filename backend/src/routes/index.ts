@@ -9,7 +9,6 @@ import ordersRoutes from "../modules/orders/orders.routes";
 import reservationRoutes from "../modules/reservation/reservation.routes";
 import settingsRoutes from "../modules/settings/settings.routes";
 import voucherRoutes from "../modules/voucher/voucher.routes";
-import webhooksRoutes from "../modules/webhooks/webhooks.routes";
 
 const router = Router();
 
@@ -23,6 +22,7 @@ router.use("/reservations", reservationRoutes);
 router.use("/catering", cateringRoutes);
 router.use("/settings", settingsRoutes);
 router.use("/admin", adminOrdersRoutes);
-router.use("/webhooks", webhooksRoutes);
+router.use("/payments", ordersRoutes);
+// router.use("/gift-vouchers", giftVouchers);
 
 export default router;

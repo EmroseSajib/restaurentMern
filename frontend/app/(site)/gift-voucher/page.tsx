@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import { GiftVoucherPageContent } from "@/components/gift-voucher/gift-voucher-page-content"
+import { GiftVoucherPageContent } from "@/components/gift-voucher/gift-voucher-page-content";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Gift Voucher",
@@ -7,10 +7,11 @@ export const metadata: Metadata = {
     "Give the gift of authentic Indian cuisine. Purchase a gift voucher for dekleineman restaurant - the perfect present for food lovers.",
   openGraph: {
     title: "Gift Voucher | dekleineman",
-    description: "Give the gift of authentic Indian cuisine with a dekleineman voucher.",
+    description:
+      "Give the gift of authentic Indian cuisine with a dekleineman voucher.",
   },
-}
+};
 
 export default function GiftVoucherPage() {
-  return <GiftVoucherPageContent />
+  return <GiftVoucherPageContent />;
 }

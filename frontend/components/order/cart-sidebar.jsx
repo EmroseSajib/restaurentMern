@@ -21,17 +21,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-interface CartSidebarProps {
-  onCheckout: () => void;
-}
-
-export function CartSidebar({ onCheckout }: CartSidebarProps) {
+export function CartSidebar({ onCheckout }) {
   const { locale, t } = useI18n();
+
   const [voucherInput, setVoucherInput] = useState("");
-  const [voucherMessage, setVoucherMessage] = useState<{
-    type: "success" | "error";
-    text: string;
-  } | null>(null);
+  const [voucherMessage, setVoucherMessage] = useState(null);
 
   const {
     items,
@@ -54,17 +48,15 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
   const deliveryFee = getDeliveryFee();
   const tax = getTax();
   const total = getTotal();
-  console.log("subtotal=====>>>", subtotal);
 
   const minimumMet =
     subtotal >= restaurantInfo.minimumOrder || deliveryType === "pickup";
+
   const handleApplyVoucher = async () => {
     if (!voucherInput.trim()) return;
 
     try {
       const result = await applyVoucher(voucherInput);
-
-      console.log("result======>>>", result?.success);
 
       setVoucherMessage({
         type: result.success ? "success" : "error",
@@ -81,7 +73,7 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
       });
     }
   };
-  console.log("voucherDiscount=====>>>", discountAmount);
+
   return (
     <Card className="shadow-xl border-amber-200">
       <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-t-lg">
@@ -95,6 +87,7 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
           )}
         </CardTitle>
       </CardHeader>
+
       <CardContent className="p-4">
         {items.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
@@ -103,34 +96,28 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
           </div>
         ) : (
           <>
-            {/* Delivery type selection */}
+            {/* Delivery type */}
             <div className="mb-4 p-3 bg-amber-50 rounded-lg">
               <p className="text-sm font-medium text-amber-900 mb-2">
                 {t.order.deliveryType.title}
               </p>
+
               <RadioGroup
                 value={deliveryType}
-                onValueChange={(value) =>
-                  setDeliveryType(value as "delivery" | "pickup")
-                }
+                onValueChange={setDeliveryType}
                 className="flex gap-4"
               >
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="delivery" id="delivery" />
-                  <Label
-                    htmlFor="delivery"
-                    className="flex items-center gap-1 cursor-pointer"
-                  >
+                  <Label htmlFor="delivery" className="flex items-center gap-1">
                     <Truck className="h-4 w-4" />
                     {t.order.deliveryType.delivery}
                   </Label>
                 </div>
+
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="pickup" id="pickup" />
-                  <Label
-                    htmlFor="pickup"
-                    className="flex items-center gap-1 cursor-pointer"
-                  >
+                  <Label htmlFor="pickup" className="flex items-center gap-1">
                     <Store className="h-4 w-4" />
                     {t.order.deliveryType.pickup}
                   </Label>
@@ -153,34 +140,35 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
                       {formatPrice(item.price * quantity)}
                     </p>
                   </div>
+
                   <div className="flex items-center gap-1">
                     <Button
                       size="icon"
                       variant="ghost"
                       className="h-7 w-7"
                       onClick={() => updateQuantity(item.id, quantity - 1)}
-                      aria-label="Decrease quantity"
                     >
                       <Minus className="h-3 w-3" />
                     </Button>
+
                     <span className="w-6 text-center text-sm font-medium">
                       {quantity}
                     </span>
+
                     <Button
                       size="icon"
                       variant="ghost"
                       className="h-7 w-7"
                       onClick={() => updateQuantity(item.id, quantity + 1)}
-                      aria-label="Increase quantity"
                     >
                       <Plus className="h-3 w-3" />
                     </Button>
+
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50"
+                      className="h-7 w-7 text-red-500"
                       onClick={() => removeItem(item.id)}
-                      aria-label="Remove item"
                     >
                       <Trash2 className="h-3 w-3" />
                     </Button>
@@ -189,21 +177,17 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
               ))}
             </div>
 
-            {/* Voucher code */}
+            {/* Voucher */}
             <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-              <p className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+              <p className="text-sm font-medium mb-2 flex items-center gap-1">
                 <Tag className="h-4 w-4" />
                 {t.order.voucher.title}
               </p>
+
               {voucherCode ? (
                 <div className="flex items-center justify-between bg-green-100 text-green-700 px-3 py-2 rounded-lg">
                   <span className="font-medium">{voucherCode}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={removeVoucher}
-                    className="h-auto p-1 text-green-600 hover:text-green-800"
-                  >
+                  <Button variant="ghost" size="sm" onClick={removeVoucher}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -213,18 +197,13 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
                     value={voucherInput}
                     onChange={(e) => setVoucherInput(e.target.value)}
                     placeholder={t.order.voucher.placeholder}
-                    className="h-9"
                   />
-                  <Button
-                    onClick={handleApplyVoucher}
-                    variant="secondary"
-                    size="sm"
-                    className="shrink-0"
-                  >
+                  <Button onClick={handleApplyVoucher} size="sm">
                     {t.order.voucher.apply}
                   </Button>
                 </div>
               )}
+
               {voucherMessage && (
                 <p
                   className={cn(
@@ -239,26 +218,25 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
               )}
             </div>
 
-            {/* Order summary */}
+            {/* Summary */}
             <div className="space-y-2 border-t pt-4">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  {t.order.subtotal}
-                </span>
+                <span>{t.order.subtotal}</span>
                 <span>{formatPrice(subtotal)}</span>
               </div>
+
               {deliveryType === "delivery" && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {t.order.deliveryFee}
-                  </span>
+                  <span>{t.order.deliveryFee}</span>
                   <span>{formatPrice(deliveryFee)}</span>
                 </div>
               )}
+
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{t.order.tax}</span>
+                <span>{t.order.tax}</span>
                 <span>{formatPrice(tax)}</span>
               </div>
+
               {voucherCode && voucherDiscount > 0 && (
                 <div className="flex justify-between text-sm text-green-600">
                   <span>Discount</span>
@@ -272,34 +250,17 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
                   </span>
                 </div>
               )}
+
               <div className="flex justify-between font-bold text-lg pt-2 border-t">
                 <span>{t.order.total}</span>
                 <span className="text-amber-600">{formatPrice(total)}</span>
               </div>
             </div>
 
-            {/* Minimum order warning */}
-            {deliveryType === "delivery" && !minimumMet && (
-              <p className="text-sm text-amber-600 mt-3 p-2 bg-amber-50 rounded-lg">
-                {locale === "nl"
-                  ? `Minimale bestelling voor bezorging: ${formatPrice(
-                      restaurantInfo.minimumOrder
-                    )}`
-                  : locale === "de"
-                  ? `Mindestbestellung für Lieferung: ${formatPrice(
-                      restaurantInfo.minimumOrder
-                    )}`
-                  : `Minimum order for delivery: ${formatPrice(
-                      restaurantInfo.minimumOrder
-                    )}`}
-              </p>
-            )}
-
-            {/* Checkout button */}
             <Button
               onClick={onCheckout}
               disabled={!minimumMet}
-              className="w-full mt-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-6"
+              className="w-full mt-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white py-6"
             >
               {t.order.checkout}
             </Button>

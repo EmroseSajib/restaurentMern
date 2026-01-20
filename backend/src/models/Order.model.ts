@@ -1,13 +1,5 @@
 import mongoose, { Schema, type InferSchemaType } from "mongoose";
 
-const MoneySchema = new Schema(
-  {
-    amount: { type: Number, required: true, min: 0 }, // cents
-    currency: { type: String, required: true, default: "EUR" },
-  },
-  { _id: false }
-);
-
 const OrderItemSchema = new Schema(
   {
     menuItemId: {
@@ -20,7 +12,7 @@ const OrderItemSchema = new Schema(
       nl: { type: String, required: true },
       de: { type: String, required: true },
     },
-    unitPrice: { type: MoneySchema, required: true }, // snapshot at time of order
+    unitPrice: { type: Number, required: true }, // snapshot at time of order
     quantity: { type: Number, required: true, min: 1, max: 50 },
 
     // snapshot flags
@@ -59,18 +51,18 @@ const OrderSchema = new Schema(
 
     bonus: {
       type: { type: String, enum: ["rice", "naan", "none"], default: "none" },
-      price: { type: MoneySchema, required: true },
+      price: { type: Number, required: true },
     },
 
     discounts: {
       voucherCode: { type: String, default: "" },
       membershipId: { type: String, default: "" },
-      discountTotal: { type: MoneySchema, required: true },
+      discountTotal: { type: Number, required: true },
     },
 
     totals: {
-      subtotal: { type: MoneySchema, required: true },
-      total: { type: MoneySchema, required: true },
+      subtotal: { type: Number, required: true },
+      total: { type: Number, required: true },
     },
 
     payment: {

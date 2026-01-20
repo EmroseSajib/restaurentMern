@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { getOrder, postOrder, postStripeCheckout } from "./orders.controller";
+import {
+  getOrder,
+  OrdersControllerCash,
+  OrdersControllerStripe,
+  postOrder,
+  postStripeCheckout,
+} from "./orders.controller";
 
 const router = Router();
 
@@ -9,5 +15,7 @@ router.get("/:id", getOrder);
 
 // Public (called after order created if paymentMethod=stripe)
 router.post("/:id/stripe/checkout", postStripeCheckout);
+router.post("/orders/cod", OrdersControllerCash);
+router.post("/stripe/checkout", OrdersControllerStripe);
 
 export default router;
