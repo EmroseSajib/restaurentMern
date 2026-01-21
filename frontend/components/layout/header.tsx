@@ -43,8 +43,9 @@ export function Header() {
   const navLinks = [
     { href: "/", label: t.nav.home },
     { href: "/menu", label: t.nav.menu },
-    { href: "/order", label: t.nav.order },
+    // { href: "/order", label: t.nav.order },
     { href: "/reservation", label: t.nav.reservation },
+    { href: "/catering", label: t.nav.catering },
     { href: "/gift-voucher", label: t.nav.giftVoucher },
     { href: "/about", label: t.nav.about },
   ];
@@ -57,7 +58,7 @@ export function Header() {
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
           ? "bg-background/95 backdrop-blur-md shadow-lg"
-          : "md:bg-transparent bg-white/95 "
+          : "md:bg-transparent bg-white/95 ",
       )}
     >
       {/* Top bar with contact */}
@@ -83,7 +84,7 @@ export function Header() {
                   "px-2 py-0.5 rounded text-xs font-medium transition-colors",
                   locale === lang.code
                     ? "bg-amber-700 text-white"
-                    : "hover:bg-amber-800"
+                    : "hover:bg-amber-800",
                 )}
                 aria-label={`Switch to ${lang.name}`}
               >
@@ -124,7 +125,7 @@ export function Header() {
                     ? "text-foreground hover:text-amber-600"
                     : "text-foreground hover:text-amber-600",
                   pathname === link.href &&
-                    "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-amber-500"
+                    "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-amber-500",
                 )}
               >
                 {link.label}
@@ -147,7 +148,7 @@ export function Header() {
                   variant="ghost"
                   size="icon"
                   className={cn(
-                    isScrolled ? "text-foreground" : "text-foreground"
+                    isScrolled ? "text-foreground" : "text-foreground",
                   )}
                   aria-label="Change language"
                 >
@@ -160,7 +161,7 @@ export function Header() {
                     key={lang.code}
                     onClick={() => setLocale(lang.code)}
                     className={cn(
-                      locale === lang.code && "bg-amber-100 text-amber-900"
+                      locale === lang.code && "bg-amber-100 text-amber-900",
                     )}
                   >
                     <span className="mr-2">{lang.flag}</span>
@@ -177,7 +178,7 @@ export function Header() {
                 size="icon"
                 className={cn(
                   "relative",
-                  isScrolled ? "text-foreground" : "text-foreground"
+                  isScrolled ? "text-foreground" : "text-foreground",
                 )}
                 aria-label={`Shopping cart with ${totalItems} items`}
               >
@@ -203,7 +204,7 @@ export function Header() {
               size="icon"
               className={cn(
                 "lg:hidden",
-                isScrolled ? "text-foreground" : "text-foreground"
+                isScrolled ? "text-foreground" : "text-foreground",
               )}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
@@ -232,8 +233,8 @@ export function Header() {
                     pathname === link.href
                       ? "bg-amber-500/20 text-amber-600"
                       : isScrolled
-                      ? "text-foreground hover:bg-muted"
-                      : "text-foreground hover:bg-muted"
+                        ? "text-foreground hover:bg-muted"
+                        : "text-foreground hover:bg-muted",
                   )}
                 >
                   {link.label}

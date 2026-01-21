@@ -14,6 +14,7 @@ export const translations = {
       order: "Order Online",
       reservation: "Reservation",
       giftVoucher: "Gift Voucher",
+      catering: "Catering",
       about: "About Us",
       gallery: "Gallery",
       contact: "Contact",
@@ -23,6 +24,7 @@ export const translations = {
       tagline: "Authentic Indian taste in the heart of Doetinchem",
       orderOnline: "Order Online",
       viewMenu: "View Menu",
+      catering: "Catering Service",
       reserveTable: "Reserve a Table",
     },
     // Occasion Banner
@@ -296,6 +298,7 @@ export const translations = {
       order: "Online Bestellen",
       reservation: "Reserveren",
       giftVoucher: "Cadeaubon",
+      catering: "Catering",
       about: "Over Ons",
       gallery: "Galerij",
       contact: "Contact",
@@ -305,6 +308,7 @@ export const translations = {
       tagline: "Authentieke Indiase smaak in het hart van Doetinchem",
       orderOnline: "Online Bestellen",
       viewMenu: "Bekijk Menu",
+      catering: "Cateringdiensten",
       reserveTable: "Reserveer een Tafel",
     },
     // Occasion Banner
@@ -581,6 +585,7 @@ export const translations = {
       order: "Online Bestellen",
       reservation: "Reservierung",
       giftVoucher: "Geschenkgutschein",
+      catering: "Catering",
       about: "Über Uns",
       gallery: "Galerie",
       contact: "Kontakt",
@@ -590,6 +595,7 @@ export const translations = {
       tagline: "Authentischer indischer Geschmack im Herzen von Doetinchem",
       orderOnline: "Online Bestellen",
       viewMenu: "Speisekarte",
+      catering: "Catering-Dienstleistungen",
       reserveTable: "Tisch Reservieren",
     },
     // Occasion Banner

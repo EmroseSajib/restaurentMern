@@ -58,13 +58,13 @@ export function HeroSection() {
               {t.hero.orderOnline}
             </Button>
           </Link>
-          <Link href="/menu">
+          <Link href="/catering">
             <Button
               size="lg"
               variant="outline"
               className="border-2 border-amber-300/50 text-white hover:bg-amber-500/20 font-semibold text-lg px-8 py-6 backdrop-blur-sm bg-transparent"
             >
-              {t.hero.viewMenu}
+              {t.hero.catering}
             </Button>
           </Link>
           <Link href="/reservation">
