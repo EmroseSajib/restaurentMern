@@ -1,15 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { getPopularItems } from "@/lib/data/menu";
 import { useI18n } from "@/lib/i18n/context";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { MenuItemCard } from "../menu/menu-item-card";
-// import { getPopularItems } from "@/lib/data/menu"
 
 export function PopularDishesSection({ items = [] }) {
   const { t } = useI18n();
-  // const popularItems = getPopularItems().slice(0, 6)
+  const popularItems = getPopularItems().slice(0, 6);
 
   return (
     <section className="py-20 bg-white">
@@ -26,7 +26,7 @@ export function PopularDishesSection({ items = [] }) {
 
         {/* Dishes grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {items?.map((item) => (
+          {popularItems?.map((item) => (
             <MenuItemCard key={item.id} item={item} />
           ))}
         </div>

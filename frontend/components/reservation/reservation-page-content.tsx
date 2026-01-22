@@ -1,7 +1,5 @@
 "use client";
 
-import type React from "react";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -78,26 +76,30 @@ export function ReservationPageContent() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-
     try {
-      // Send reservation to API
-      const response = await fetch("/api/reservations", {
+      const API =
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+
+      const res = await fetch(`${API}/v1/reservations/request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error("Failed to submit");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data?.success === false) {
+        throw new Error(data?.message || "Failed to submit reservation");
+      }
 
       setIsSuccess(true);
-    } catch (error) {
-      console.error("Reservation error:", error);
+    } catch (err) {
+      console.error(err);
+      alert(err?.message || "Something went wrong");
     } finally {
       setIsSubmitting(false);
     }
@@ -344,8 +346,8 @@ export function ReservationPageContent() {
                       locale === "nl"
                         ? "Bijv. allergieën, speciale gelegenheden..."
                         : locale === "de"
-                        ? "Z.B. Allergien, besondere Anlässe..."
-                        : "E.g. allergies, special occasions..."
+                          ? "Z.B. Allergien, besondere Anlässe..."
+                          : "E.g. allergies, special occasions..."
                     }
                   />
                 </div>
@@ -368,8 +370,7 @@ export function ReservationPageContent() {
             <div
               className="h-64 rounded-2xl bg-cover bg-center shadow-xl"
               style={{
-                backgroundImage:
-                  "url(/table_reservation.jpeg)",
+                backgroundImage: "url(/table_reservation.jpeg)",
               }}
             />
 
@@ -433,8 +434,8 @@ export function ReservationPageContent() {
                   {locale === "nl"
                     ? "Voor groepsreserveringen (meer dan 10 personen), neem telefonisch contact met ons op."
                     : locale === "de"
-                    ? "Für Gruppenreservierungen (mehr als 10 Personen) kontaktieren Sie uns bitte telefonisch."
-                    : "For group reservations (more than 10 people), please contact us by phone."}
+                      ? "Für Gruppenreservierungen (mehr als 10 Personen) kontaktieren Sie uns bitte telefonisch."
+                      : "For group reservations (more than 10 people), please contact us by phone."}
                 </p>
                 <a
                   href={`tel:${restaurantInfo.contact.phone}`}

@@ -6,6 +6,7 @@ function isEmail(email: string) {
 
 export const CateringService = {
   async sendEmailToAdmin(payload: any) {
+    console.log("Catering request payload:", payload);
     const name = String(payload?.name || "").trim();
     const email = String(payload?.email || "").trim();
     const phone = String(payload?.phone || "").trim();

@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/home/hero-section";
 import { HighlightsSection } from "@/components/home/highlights-section";
 import { HoursSection } from "@/components/home/hours-section";
 import { LocationSection } from "@/components/home/location-section";
+import { PopularDishesSection } from "@/components/home/popular-dishes-section";
 import PopularDishesClient from "@/components/home/PopularDishesClient";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { OccasionBanner } from "@/components/ui/occasion-banner";
@@ -31,8 +32,9 @@ export default function HomePage() {
 
       <HeroSection />
       <HighlightsSection />
+      <PopularDishesSection />
       {/* <PopularDishesSection /> */}
-      <PopularDishesClient />
+      {/* <PopularDishesClient /> */}
       <CTASection />
       <HoursSection />
       <LocationSection />

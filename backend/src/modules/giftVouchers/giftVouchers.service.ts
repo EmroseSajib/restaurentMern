@@ -1,6 +1,6 @@
+import nodemailer from "nodemailer";
 import Stripe from "stripe";
 import { GiftVoucherModel } from "../../models/GiftVoucher.model";
-import mail from "../../utils/mail";
 import {
   generateVoucherCode,
   isValidCustomCode,
@@ -17,6 +17,18 @@ function badRequest(message: string) {
   return err;
 }
 
+function getTransporter() {
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  if (!user || !pass) throw new Error("SMTP_USER/SMTP_PASS missing in env");
+
+  // Gmail App Password
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: { user, pass },
+  });
+}
+
 async function createUniqueCode(customCode?: string) {
   if (customCode?.trim()) {
     if (!isValidCustomCode(customCode))
@@ -31,7 +43,6 @@ async function createUniqueCode(customCode?: string) {
     return c;
   }
 
-  // auto-generate with retries
   for (let i = 0; i < 10; i++) {
     const code = generateVoucherCode();
     const exists = await GiftVoucherModel.findOne({ code });
@@ -51,16 +62,14 @@ export const GiftVouchersService = {
       buyerEmail,
       customCode,
     } = payload;
-    console.log("Payload received for voucher creation:", payload);
+
     const amt = Math.round(Number(amount || 0));
     if (!Number.isFinite(amt) || amt < 10) throw badRequest("Minimum €10");
     if (!recipientEmail) throw badRequest("Recipient email required");
     if (!buyerEmail) throw badRequest("Buyer email required");
 
-    // ✅ code: custom or auto
     const code = await createUniqueCode(customCode);
-
-    // create pending voucher
+ 
     const voucher = await GiftVoucherModel.create({
       code,
       amount: amt,
@@ -83,10 +92,8 @@ export const GiftVouchersService = {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      // ✅ show BOTH
       payment_method_types: ["card", "ideal"],
       customer_email: buyerEmail,
-
       line_items: [
         {
           quantity: 1,
@@ -97,10 +104,8 @@ export const GiftVouchersService = {
           },
         },
       ],
-
       success_url: `${frontend}/gift-voucher/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${frontend}/gift-voucher?cancelled=1`,
-
       metadata: { voucherId: String(voucher._id) },
     });
 
@@ -117,32 +122,36 @@ export const GiftVouchersService = {
     const whSecret = process.env.STRIPE_WEBHOOK_SECRET;
     if (!whSecret) throw new Error("Missing STRIPE_WEBHOOK_SECRET in env");
 
-    // req.body is a Buffer because of express.raw()
     const event = stripe.webhooks.constructEvent(req.body, sig, whSecret);
+    console.log("✅ Gift voucher webhook HIT:", event.type);
 
-    // ✅ only handle success payment
-    if (event.type !== "checkout.session.completed") return;
+    // card + ideal success
+    if (
+      event.type !== "checkout.session.completed" &&
+      event.type !== "checkout.session.async_payment_succeeded"
+    ) {
+      return;
+    }
 
     const session = event.data.object as Stripe.Checkout.Session;
     const voucherId = session.metadata?.voucherId;
-
     if (!voucherId) throw new Error("Missing voucherId in session metadata");
 
     const voucher = await GiftVoucherModel.findById(voucherId);
     if (!voucher) throw new Error("Voucher not found");
 
-    // Prevent double email if Stripe retries webhook
     if (voucher.paymentStatus === "paid") return;
 
-    // Mark paid
     voucher.paymentStatus = "paid";
     voucher.stripeSessionId = session.id;
     await voucher.save();
 
-    // ✅ send email to recipient + buyer
+    const transporter = getTransporter();
+    const from = process.env.MAIL_FROM || process.env.SMTP_USER;
+
     const subject = `Your Gift Voucher (€${voucher.amount})`;
 
-    const text = `
+    const recipientText = `
 Hello ${voucher.recipientName || "there"},
 
 You received a gift voucher!
@@ -160,18 +169,7 @@ Thank you,
 Restaurant Team
     `.trim();
 
-    // send to recipient
-    await mail.sendMail({
-      to: voucher.recipientEmail,
-      subject,
-      text,
-    });
-
-    // optional: send to buyer too
-    await mail.sendMail({
-      to: voucher.buyerEmail,
-      subject: `Voucher Purchased Successfully (€${voucher.amount})`,
-      text: `
+    const buyerText = `
 Hi ${voucher.buyerName || "there"},
 
 Your gift voucher payment is confirmed ✅
@@ -183,7 +181,27 @@ Recipient: ${voucher.recipientEmail}
 We also emailed the voucher to the recipient.
 
 — Restaurant Team
-      `.trim(),
-    });
+    `.trim();
+
+    try {
+      await transporter.sendMail({
+        from,
+        to: voucher.recipientEmail,
+        subject,
+        text: recipientText,
+        replyTo: voucher.buyerEmail,
+      });
+
+      await transporter.sendMail({
+        from,
+        to: voucher.buyerEmail,
+        subject: `Voucher Purchased Successfully (€${voucher.amount})`,
+        text: buyerText,
+      });
+
+      console.log("✅ Emails sent");
+    } catch (err) {
+      console.error("❌ Email sending failed:", err);
+    }
   },
 };
