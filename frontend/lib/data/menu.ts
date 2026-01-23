@@ -3,8 +3,8 @@
 // All dishes with multilingual support
 // ===========================================
 
-export type SpiceLevel = "mild" | "medium" | "hot" | "veryHot"
-export type DietaryTag = "vegetarian" | "vegan" | "glutenFree"
+export type SpiceLevel = "mild" | "medium" | "hot" | "veryHot";
+export type DietaryTag = "vegetarian" | "vegan" | "glutenFree";
 export type MenuCategory =
   | "popular"
   | "main"
@@ -14,27 +14,27 @@ export type MenuCategory =
   | "kufte"
   | "sides"
   | "desserts"
-  | "drinks"
+  | "drinks";
 
 export interface MenuItem {
-  id: string
+  id: string;
   name: {
-    en: string
-    nl: string
-    de: string
-  }
+    en: string;
+    nl: string;
+    de: string;
+  };
   description: {
-    en: string
-    nl: string
-    de: string
-  }
-  price: number
-  category: MenuCategory
-  spiceLevel?: SpiceLevel
-  dietary?: DietaryTag[]
-  image?: string
-  isPopular?: boolean
-  isNew?: boolean
+    en: string;
+    nl: string;
+    de: string;
+  };
+  price: number;
+  category: MenuCategory;
+  spiceLevel?: SpiceLevel;
+  dietary?: DietaryTag[];
+  image?: string;
+  isPopular?: boolean;
+  isNew?: boolean;
 }
 
 export const menuItems: MenuItem[] = [
@@ -790,18 +790,18 @@ export const menuItems: MenuItem[] = [
     category: "drinks",
     image: "/placeholder.svg?height=300&width=400",
   },
-]
+];
 
 export function getMenuItemsByCategory(category: MenuCategory): MenuItem[] {
-  return menuItems.filter((item) => item.category === category)
+  return menuItems.filter((item) => item.category === category);
 }
 
 export function getPopularItems(): MenuItem[] {
-  return menuItems.filter((item) => item.isPopular)
+  return menuItems.filter((item) => item?.category == "main");
 }
 
 export function getMenuItemById(id: string): MenuItem | undefined {
-  return menuItems.find((item) => item.id === id)
+  return menuItems.find((item) => item.id === id);
 }
 
 export const menuCategories: { key: MenuCategory; priority: number }[] = [
@@ -814,4 +814,4 @@ export const menuCategories: { key: MenuCategory; priority: number }[] = [
   { key: "sides", priority: 7 },
   { key: "desserts", priority: 8 },
   { key: "drinks", priority: 9 },
-]
+];

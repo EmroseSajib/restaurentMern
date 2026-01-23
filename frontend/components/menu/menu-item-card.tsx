@@ -32,10 +32,10 @@ export function MenuItemCard({ item, variant = "default" }: MenuItemCardProps) {
     return (
       <Card className="group hover:shadow-lg transition-shadow">
         <CardContent className="p-4 flex items-center gap-4">
-          {item.imageUrl && (
+          {item.image && (
             <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
               <Image
-                src={item.imageUrl || "/placeholder.svg"}
+                src={item.image || "/placeholder.svg"}
                 alt={name}
                 fill
                 className="object-cover"
@@ -71,10 +71,10 @@ export function MenuItemCard({ item, variant = "default" }: MenuItemCardProps) {
   return (
     <Card className="group hover:shadow-xl transition-all overflow-hidden">
       {/* Image */}
-      {item.imageUrl && (
+      {item.image && (
         <div className="relative h-48 overflow-hidden">
           <Image
-            src={item.imageUrl || "/placeholder.svg"}
+            src={item.image || "/placeholder.svg"}
             alt={name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
