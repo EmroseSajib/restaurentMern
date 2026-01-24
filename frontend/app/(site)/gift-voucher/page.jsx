@@ -2,6 +2,7 @@
 
 import { GiftVoucherPageContent } from "@/components/gift-voucher/gift-voucher-page-content";
 import { useSearchParams } from "next/navigation";
+export const dynamic = "force-dynamic"; // 🔑 prevents prerender crash
 
 export default function GiftVoucherPage() {
   const searchParams = useSearchParams();
