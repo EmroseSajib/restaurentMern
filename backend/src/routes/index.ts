@@ -3,7 +3,6 @@ import adminRoutes from "../modules/admin/admin.routes";
 import adminOrdersRoutes from "../modules/adminOrders/adminOrders.routes";
 import authRoutes from "../modules/auth/auth.routes";
 import cateringRoutes from "../modules/catering/cateringRoutes";
-import giftVouchersRoutes from "../modules/giftVouchers/giftVouchers.routes";
 import membershipRoutes from "../modules/membership/membership.routes";
 import menuRoutes from "../modules/menu/menu.routes";
 import ordersRoutes from "../modules/orders/orders.routes";
@@ -25,6 +24,6 @@ router.use("/reservations", reservations);
 router.use("/settings", settingsRoutes);
 router.use("/admin", adminOrdersRoutes);
 router.use("/payments", ordersRoutes);
-router.use("/gift-vouchers", giftVouchersRoutes);
+// router.use("/gift-vouchers", giftVouchersRoutes);
 
 export default router;

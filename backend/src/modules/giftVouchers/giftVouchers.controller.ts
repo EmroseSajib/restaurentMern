@@ -26,3 +26,13 @@ export const giftVoucherStripeWebhook = asyncHandler(
     return res.json({ received: true });
   },
 );
+export const getVoucherAfterPayment = asyncHandler(async (req, res) => {
+  const sessionId = String(req.query.session_id || "");
+  if (!sessionId)
+    return res
+      .status(400)
+      .json({ success: false, message: "session_id required" });
+
+  const data = await GiftVouchersService.getVoucherAfterPayment(sessionId);
+  return res.json({ success: true, data });
+});

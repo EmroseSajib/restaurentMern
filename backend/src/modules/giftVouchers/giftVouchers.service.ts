@@ -62,14 +62,14 @@ export const GiftVouchersService = {
       buyerEmail,
       customCode,
     } = payload;
-
+    console.log("amount:", amount);
     const amt = Math.round(Number(amount || 0));
     if (!Number.isFinite(amt) || amt < 10) throw badRequest("Minimum €10");
     if (!recipientEmail) throw badRequest("Recipient email required");
     if (!buyerEmail) throw badRequest("Buyer email required");
 
     const code = await createUniqueCode(customCode);
- 
+
     const voucher = await GiftVoucherModel.create({
       code,
       amount: amt,
@@ -203,5 +203,40 @@ We also emailed the voucher to the recipient.
     } catch (err) {
       console.error("❌ Email sending failed:", err);
     }
+  },
+
+  async getVoucherAfterPayment(sessionId: string) {
+    // 1) Verify with Stripe
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    // 2) If not paid yet, tell frontend to wait (important for iDEAL)
+    if (session.payment_status !== "paid") {
+      return {
+        status: "pending",
+        message: "Payment is processing. Please refresh.",
+      };
+    }
+
+    // 3) Get voucherId from metadata (you already set it)
+    const voucherId = session.metadata?.voucherId;
+    if (!voucherId) throw new Error("Missing voucherId in session metadata");
+
+    // 4) Fetch voucher from DB and return code
+    const voucher = await GiftVoucherModel.findById(voucherId);
+    if (!voucher) throw new Error("Voucher not found");
+
+    // (Optional but good) Mark paid here too
+    if (voucher.paymentStatus !== "paid") {
+      voucher.paymentStatus = "paid";
+      voucher.stripeSessionId = session.id;
+      await voucher.save();
+    }
+
+    return {
+      status: "paid",
+      code: voucher.code,
+      amount: voucher.amount,
+      currency: voucher.currency,
+    };
   },
 };

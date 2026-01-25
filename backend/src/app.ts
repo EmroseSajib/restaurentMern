@@ -6,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { env } from "./config/env";
 import { errorMiddleware } from "./middlewares/error.middleware";
+import giftVouchersRoutes from "./modules/giftVouchers/giftVouchers.routes";
 import routes from "./routes";
 export function createApp() {
   const app = express();
@@ -30,6 +31,8 @@ export function createApp() {
       allowedHeaders: ["Content-Type", "Authorization"],
     }),
   );
+
+  app.use("/v1/gift-vouchers", giftVouchersRoutes);
 
   app.use(compression());
   app.use(express.json({ limit: "1mb" }));

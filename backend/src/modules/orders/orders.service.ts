@@ -250,21 +250,21 @@ export const OrdersService = {
     const orderNumber = generateOrderNumber();
 
     // create order pending
-    const order = await OrderModel.create({
-      orderNumber,
-      customer,
-      fulfillment,
-      items,
-      bonus: bonus || { type: "none", price: 0 },
-      discounts: discounts || {
-        voucherCode: "",
-        membershipId: "",
-        discountTotal: 0,
-      },
-      totals,
-      payment: { method: "stripe", status: "pending", stripeSessionId: "" },
-      status: "new",
-    });
+    // const order = await OrderModel.create({
+    //   orderNumber,
+    //   customer,
+    //   fulfillment,
+    //   items,
+    //   bonus: bonus || { type: "none", price: 0 },
+    //   discounts: discounts || {
+    //     voucherCode: "",
+    //     membershipId: "",
+    //     discountTotal: 0,
+    //   },
+    //   totals,
+    //   payment: { method: "stripe", status: "pending", stripeSessionId: "" },
+    //   status: "new",
+    // });
 
     const line_items = items.map((it: any) => ({
       quantity: Number(it.quantity || 1),
@@ -290,13 +290,14 @@ export const OrdersService = {
       }/order/cancelled?orderNumber=${encodeURIComponent(orderNumber)}`,
 
       metadata: {
-        orderId: String(order._id),
+        // orderId: String(order._id),
         orderNumber: orderNumber,
+        customerEmail: customer?.email || "",
       },
     });
 
-    order.payment.stripeSessionId = session.id;
-    await order.save();
+    // order.payment.stripeSessionId = session.id;
+    // await order.save();
 
     return { url: session.url, orderNumber };
   },
