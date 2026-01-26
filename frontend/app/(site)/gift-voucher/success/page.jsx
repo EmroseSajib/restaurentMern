@@ -1,26 +1,41 @@
+"use client";
+
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-async function fetchVoucher(sessionId) {
-  const base = process.env.API_BASE_URL;
-  if (!base) return { status: "pending" };
+export default function SuccessClient() {
+  const sp = useSearchParams();
+  const sessionId = sp.get("session_id");
 
-  const res = await fetch(
-    `${base}/v1/gift-vouchers/stripe/success?session_id=${encodeURIComponent(sessionId)}`,
-    { cache: "no-store" },
-  );
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!res.ok) return { status: "pending" };
-  const json = await res.json();
-  return json?.data ?? { status: "pending" };
-}
+  useEffect(() => {
+    async function run() {
+      if (!sessionId) {
+        setLoading(false);
+        return;
+      }
 
-export default async function GiftVoucherSuccessPage({ searchParams }) {
-  const sessionId = searchParams?.session_id || null;
+      try {
+        const base =
+          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+        const res = await fetch(
+          `${base}/v1/gift-vouchers/stripe/success?session_id=${encodeURIComponent(sessionId)}`,
+        );
+        const json = await res.json();
+        setData(json?.data ?? null);
+      } catch (e) {
+        setData(null);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  // NOTE: server component logs go to terminal, not browser
-  console.log("session_id:", sessionId);
+    run();
+  }, [sessionId]);
 
-  const data = sessionId ? await fetchVoucher(sessionId) : null;
   const isPaid = data?.status === "paid";
 
   return (
@@ -34,33 +49,37 @@ export default async function GiftVoucherSuccessPage({ searchParams }) {
           Thanks! Your gift voucher payment was completed.
         </p>
 
-        {sessionId ? (
-          isPaid ? (
-            <div className="mt-5 rounded-xl border bg-green-50 p-4">
-              <p className="text-sm font-semibold text-green-800">
-                Your Redeem Code
-              </p>
-              <p className="mt-2 text-lg font-bold tracking-widest">
-                {data.code}
-              </p>
-            </div>
-          ) : (
-            <div className="mt-5 rounded-xl border bg-yellow-50 p-4">
-              <p className="text-sm font-semibold text-yellow-900">
-                Payment processing…
-              </p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                Refresh this page in a moment to see your redeem code.
-              </p>
-            </div>
-          )
-        ) : (
+        {!sessionId ? (
           <div className="mt-5 rounded-xl border bg-red-50 p-4">
             <p className="text-sm font-semibold text-red-700">
               Missing session_id
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
-              This page must be opened from Stripe redirect after payment.
+              URL must include ?session_id=...
+            </p>
+          </div>
+        ) : loading ? (
+          <div className="mt-5 rounded-xl border bg-yellow-50 p-4">
+            <p className="text-sm font-semibold text-yellow-900">
+              Loading voucher…
+            </p>
+          </div>
+        ) : isPaid ? (
+          <div className="mt-5 rounded-xl border bg-green-50 p-4">
+            <p className="text-sm font-semibold text-green-800">
+              Your Redeem Code
+            </p>
+            <p className="mt-2 text-lg font-bold tracking-widest">
+              {data.code}
+            </p>
+          </div>
+        ) : (
+          <div className="mt-5 rounded-xl border bg-yellow-50 p-4">
+            <p className="text-sm font-semibold text-yellow-900">
+              Payment processing…
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              If you paid with iDEAL, it may take a moment. Refresh this page.
             </p>
           </div>
         )}

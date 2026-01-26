@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { GiftVouchersService } from "./giftVouchers.service";
+import { validateGiftVoucher } from "./validateGiftVoucher";
 
 // ✅ 1) Create Stripe Checkout (same as you already have)
 export const createGiftVoucherCheckout = asyncHandler(
@@ -36,3 +37,18 @@ export const getVoucherAfterPayment = asyncHandler(async (req, res) => {
   const data = await GiftVouchersService.getVoucherAfterPayment(sessionId);
   return res.json({ success: true, data });
 });
+export const validateGiftVoucherController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const data = await validateGiftVoucher(req.body);
+    return res.json({ success: true, data });
+  },
+);
+
+// OPTIONAL
+export const redeemGiftVoucher = asyncHandler(
+  async (req: Request, res: Response) => {
+    const code = String(req.body?.code || "");
+    const data = await GiftVouchersService.redeemVoucher(code);
+    return res.json({ success: true, data });
+  },
+);

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { MenuPageContent } from "@/components/menu/menu-page-content"
+import { MenuPageContent } from "@/componentscomponents/menu/menu-page-content"
 
 export const metadata: Metadata = {
   title: "Menu",

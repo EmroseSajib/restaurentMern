@@ -25,7 +25,7 @@ const GiftVoucherSchema = new Schema(
     recipientName: { type: String, default: "" },
     recipientEmail: { type: String, default: "" },
     message: { type: String, default: "" },
-
+    type: { type: String, enum: ["percent", "fixed"], default: "fixed" },
     buyerName: { type: String, default: "" },
     buyerEmail: { type: String, default: "" },
   },

@@ -194,7 +194,7 @@ export const useCartStore = create()(
           if (existingItem) {
             return {
               items: state.items.map((i) =>
-                i.item.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+                i.item.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
               ),
             };
           }
@@ -215,7 +215,7 @@ export const useCartStore = create()(
         }
         set((state) => ({
           items: state.items.map((i) =>
-            i.item.id === itemId ? { ...i, quantity } : i
+            i.item.id === itemId ? { ...i, quantity } : i,
           ),
         }));
       },
@@ -241,7 +241,6 @@ export const useCartStore = create()(
         const result = await validateVoucherApi({
           code: code.toUpperCase(),
           subtotalAmount: subtotal,
-          currency: "EUR",
         });
 
         if (!result.ok) {
@@ -294,7 +293,7 @@ export const useCartStore = create()(
       getSubtotal: () => {
         return get().items.reduce(
           (sum, item) => sum + item.item.price * item.quantity,
-          0
+          0,
         );
       },
 
@@ -335,6 +334,6 @@ export const useCartStore = create()(
         return get().items.reduce((sum, item) => sum + item.quantity, 0);
       },
     }),
-    { name: "dekleineman-cart" }
-  )
+    { name: "dekleineman-cart" },
+  ),
 );

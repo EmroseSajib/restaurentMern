@@ -6,6 +6,8 @@ import {
   isValidCustomCode,
   normalizeCode,
 } from "../../utils/voucherCode";
+import { normalizeVoucherCode } from "../../utils/voucherCodeNormalize";
+import apiError = require("../../utils/apiError");
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20" as any,
@@ -77,9 +79,10 @@ export const GiftVouchersService = {
       maxRedemptions: 1,
       redemptionsCount: 0,
       isActive: true,
-      paymentStatus: "pending",
+      paymentStatus: "paid",
       recipientName: recipientName || "",
       recipientEmail,
+      type: "fixed",
       message: message || "",
       buyerName: buyerName || "",
       buyerEmail,
@@ -237,6 +240,55 @@ We also emailed the voucher to the recipient.
       code: voucher.code,
       amount: voucher.amount,
       currency: voucher.currency,
+    };
+  },
+
+  // OPTIONAL: redeem endpoint (increments count safely)
+  async redeemVoucher(codeRaw: string) {
+    const code = normalizeVoucherCode(codeRaw);
+    if (!code) throw badRequest("Voucher code required");
+
+    // atomic redeem: only increments if usable
+    const updated = await GiftVoucherModel.findOneAndUpdate(
+      {
+        code,
+        isActive: true,
+        paymentStatus: "paid",
+        $expr: { $lt: ["$redemptionsCount", "$maxRedemptions"] },
+      },
+      { $inc: { redemptionsCount: 1 } },
+      { new: true },
+    );
+
+    if (!updated) {
+      // find reason for better message
+      const v = await GiftVoucherModel.findOne({ code }).lean();
+      if (!v) return { success: false, reason: "NOT_FOUND" };
+      if (!v.isActive) return { success: false, reason: "INACTIVE" };
+      if (v.paymentStatus !== "paid")
+        return { success: false, reason: "NOT_PAID" };
+      if (v.redemptionsCount >= v.maxRedemptions)
+        return { success: false, reason: "ALREADY_REDEEMED" };
+      return { success: false, reason: "NOT_REDEEMABLE" };
+    }
+
+    // OPTIONAL: auto deactivate if fully redeemed
+    if (
+      updated.redemptionsCount >= updated.maxRedemptions &&
+      updated.isActive
+    ) {
+      updated.isActive = false;
+      await updated.save();
+    }
+
+    return {
+      success: true,
+      reason: "REDEEMED",
+      code: updated.code,
+      amount: updated.amount,
+      currency: updated.currency,
+      redemptionsCount: updated.redemptionsCount,
+      maxRedemptions: updated.maxRedemptions,
     };
   },
 };
