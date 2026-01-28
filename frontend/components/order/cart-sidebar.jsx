@@ -40,13 +40,13 @@ export function CartSidebar({ onCheckout }) {
     removeVoucher,
     getSubtotal,
     getDeliveryFee,
-    getTax,
+    // getTax,
     getTotal,
   } = useCartStore();
 
   const subtotal = getSubtotal();
   const deliveryFee = getDeliveryFee();
-  const tax = getTax();
+  // const tax = getTax();
   const total = getTotal();
 
   const minimumMet =
@@ -210,7 +210,7 @@ export function CartSidebar({ onCheckout }) {
                     "text-xs mt-2",
                     voucherMessage.type === "success"
                       ? "text-green-600"
-                      : "text-red-500"
+                      : "text-red-500",
                   )}
                 >
                   {voucherMessage.text}
@@ -232,10 +232,10 @@ export function CartSidebar({ onCheckout }) {
                 </div>
               )}
 
-              <div className="flex justify-between text-sm">
+              {/* <div className="flex justify-between text-sm">
                 <span>{t.order.tax}</span>
                 <span>{formatPrice(tax)}</span>
-              </div>
+              </div> */}
 
               {voucherCode && voucherDiscount > 0 && (
                 <div className="flex justify-between text-sm text-green-600">
@@ -245,7 +245,7 @@ export function CartSidebar({ onCheckout }) {
                     {formatPrice(
                       voucherDiscount <= 20
                         ? subtotal * (voucherDiscount / 100)
-                        : voucherDiscount
+                        : voucherDiscount,
                     )}
                   </span>
                 </div>

@@ -199,7 +199,15 @@ export function Footer() {
       {/* Copyright */}
       <div className="bg-amber-900/50 py-4">
         <div className="container mx-auto px-4 text-center text-amber-300/60 text-sm">
-          {t.footer.copyright}
+          {t.footer.copyright}{" "}
+          <a
+            href="https://taxis.it.com/" // 🔁 your IT website
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-amber-300 hover:text-amber-200 transition-colors"
+          >
+            Taxis IT
+          </a>
         </div>
       </div>
     </footer>

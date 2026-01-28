@@ -270,7 +270,7 @@ export const translations = {
         placeholder: "Your email",
         subscribe: "Subscribe",
       },
-      copyright: "© 2025 dekleineman. All rights reserved.",
+      copyright: "© 2026 Designed & Developed by",
     },
     // Common
     common: {
@@ -557,7 +557,7 @@ export const translations = {
         placeholder: "Uw e-mail",
         subscribe: "Aanmelden",
       },
-      copyright: "© 2025 dekleineman. Alle rechten voorbehouden.",
+      copyright: "© 2026 Ontworpen en ontwikkeld door",
     },
     // Common
     common: {
@@ -846,7 +846,7 @@ export const translations = {
         placeholder: "Ihre E-Mail",
         subscribe: "Anmelden",
       },
-      copyright: "© 2025 dekleineman. Alle Rechte vorbehalten.",
+      copyright: "© 2026 Entworfen und entwickelt von",
     },
     // Common
     common: {

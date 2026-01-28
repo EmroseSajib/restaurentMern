@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ShieldPlus } from "lucide-react";
 
 import { restaurantInfo } from "@/lib/data/restaurant";
 import { useI18n } from "@/lib/i18n/context";
@@ -131,12 +130,12 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link
+            {/* <Link
               href="/admin/login"
               className={cn("font-medium transition-colors relative py-1")}
             >
               <ShieldPlus className="text-amber-500" />
-            </Link>
+            </Link> */}
           </div>
 
           {/* Right side actions */}

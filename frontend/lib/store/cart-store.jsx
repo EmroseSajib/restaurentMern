@@ -254,26 +254,36 @@ export const useCartStore = create()(
           return { success: false, message: result.message };
         }
 
-        // ✅ Adjust these paths to match YOUR backend response
-        // Example possibilities:
-        // result.data.data.discountValue
-        // result.data.data.value + result.data.data.type
-        // result.data.discount
         const payload = result.data?.data || result.data;
 
         const type = payload?.type || payload?.discountType; // "fixed" | "percent"
         const value =
-          payload?.value ?? payload?.discount ?? payload?.discountValue ?? 0;
+          payload?.value ?? payload?.discount ?? payload?.discountAmount ?? 0;
+
+        const numericValue = Number(value) || 0;
+
+        // ✅ if discount is 0, don't show "applied" message
+        if (numericValue <= 0) {
+          set({
+            voucherCode: null, // or keep code if you want
+            voucherDiscount: 0,
+            voucherType: null,
+            voucherMessage: "", // clear message
+          });
+
+          return { success: false, message: "" };
+          // or: return { success: false, message: "No discount available" };
+        }
 
         const message =
           payload?.message ||
           (type === "percent"
-            ? `${value}% discount applied!`
-            : `€${value} discount applied!`);
+            ? `${numericValue}% discount applied!`
+            : `€${numericValue} discount applied!`);
 
         set({
           voucherCode: code.toUpperCase(),
-          voucherDiscount: Number(value) || 0,
+          voucherDiscount: numericValue,
           voucherType: type || "fixed",
           voucherMessage: message,
         });
@@ -303,10 +313,10 @@ export const useCartStore = create()(
         return restaurantInfo.deliveryFee;
       },
 
-      getTax: () => {
-        const subtotal = get().getSubtotal();
-        return subtotal * restaurantInfo.taxRate;
-      },
+      // getTax: () => {
+      //   const subtotal = get().getSubtotal();
+      //   return subtotal * restaurantInfo.taxRate;
+      // },
 
       getDiscountAmount: () => {
         const subtotal = get().getSubtotal();
@@ -324,10 +334,10 @@ export const useCartStore = create()(
       getTotal: () => {
         const subtotal = get().getSubtotal();
         const deliveryFee = get().getDeliveryFee();
-        const tax = get().getTax();
+        // const tax = get().getTax();
         const discount = get().getDiscountAmount();
 
-        return Math.max(0, subtotal + deliveryFee + tax - discount);
+        return Math.max(0, subtotal + deliveryFee - discount);
       },
 
       getTotalItems: () => {
