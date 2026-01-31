@@ -37,14 +37,14 @@ export function CheckoutForm({ onBack, onSuccess }) {
     deliveryType,
     getSubtotal,
     getDeliveryFee,
-    getTax,
+    // getTax,
     getTotal,
     clearCart,
   } = useCartStore();
 
   const subtotal = getSubtotal();
   const deliveryFee = getDeliveryFee();
-  const tax = getTax();
+  // const tax = getTax();
   const total = getTotal();
 
   const validateForm = () => {
@@ -425,12 +425,12 @@ export function CheckoutForm({ onBack, onSuccess }) {
                       </div>
                     )}
 
-                    <div className="flex justify-between text-sm">
+                    {/* <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
                         {t.order.tax}
                       </span>
                       <span>{formatPrice(tax)}</span>
-                    </div>
+                    </div> */}
 
                     <div className="flex justify-between font-bold text-lg pt-2 border-t">
                       <span>{t.order.total}</span>

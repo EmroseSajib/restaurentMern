@@ -236,7 +236,7 @@ export const useCartStore = create()(
 
       // ✅ REAL API voucher validation
       applyVoucher: async (code) => {
-        const subtotal = get().getSubtotal();
+        const subtotal = get().getSubtotal() + get().getDeliveryFee();
 
         const result = await validateVoucherApi({
           code: code.toUpperCase(),
@@ -258,7 +258,7 @@ export const useCartStore = create()(
 
         const type = payload?.type || payload?.discountType; // "fixed" | "percent"
         const value =
-          payload?.value ?? payload?.discount ?? payload?.discountAmount ?? 0;
+          payload?.value ?? payload?.discount ?? payload?.voucherAmount ?? 0;
 
         const numericValue = Number(value) || 0;
 
