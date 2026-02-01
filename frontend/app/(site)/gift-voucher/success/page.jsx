@@ -20,7 +20,7 @@ export default function SuccessClient() {
 
       try {
         const base =
-          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+          process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
         const res = await fetch(
           `${base}/v1/gift-vouchers/stripe/success?session_id=${encodeURIComponent(sessionId)}`,
         );

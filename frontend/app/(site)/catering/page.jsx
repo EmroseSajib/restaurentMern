@@ -69,8 +69,7 @@ export default function CateringPage() {
     setLoading(true);
     try {
       //   ✅ Replace with your real backend endpoint later
-      const API =
-        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+      const API = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
       const res = await fetch(`${API}/v1/catering/request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

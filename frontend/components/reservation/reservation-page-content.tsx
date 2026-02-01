@@ -82,8 +82,7 @@ export function ReservationPageContent() {
 
     setIsSubmitting(true);
     try {
-      const API =
-        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+      const API = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
 
       const res = await fetch(`${API}/v1/reservations/request`, {
         method: "POST",

@@ -79,8 +79,7 @@ export function GiftVoucherPageContent() {
 
     setIsSubmitting(true);
     try {
-      const API =
-        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+      const API = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
 
       const payload = {
         amount: selectedAmount,
@@ -147,7 +146,7 @@ export function GiftVoucherPageContent() {
                           "p-4 rounded-lg border-2 font-bold text-lg transition-all",
                           !useCustomAmount && formData.amount === amount
                             ? "border-amber-500 bg-amber-50 text-amber-700"
-                            : "border-gray-200 hover:border-amber-300"
+                            : "border-gray-200 hover:border-amber-300",
                         )}
                       >
                         {formatPrice(amount)}
@@ -161,7 +160,7 @@ export function GiftVoucherPageContent() {
                       onClick={() => setUseCustomAmount(true)}
                       className={cn(
                         "text-sm text-amber-600 hover:text-amber-700",
-                        useCustomAmount && "font-semibold"
+                        useCustomAmount && "font-semibold",
                       )}
                     >
                       {t.giftVoucher.customAmount}
@@ -183,7 +182,7 @@ export function GiftVoucherPageContent() {
                             }
                             className={cn(
                               "pl-8",
-                              errors.customAmount && "border-red-500"
+                              errors.customAmount && "border-red-500",
                             )}
                             placeholder="10"
                           />
@@ -258,7 +257,7 @@ export function GiftVoucherPageContent() {
                           handleInputChange("recipientEmail", e.target.value)
                         }
                         className={cn(
-                          errors.recipientEmail && "border-red-500"
+                          errors.recipientEmail && "border-red-500",
                         )}
                       />
                       {errors.recipientEmail && (
@@ -284,8 +283,8 @@ export function GiftVoucherPageContent() {
                         locale === "nl"
                           ? "Voeg een persoonlijk bericht toe..."
                           : locale === "de"
-                          ? "Fügen Sie eine persönliche Nachricht hinzu..."
-                          : "Add a personal message..."
+                            ? "Fügen Sie eine persönliche Nachricht hinzu..."
+                            : "Add a personal message..."
                       }
                     />
                   </div>
@@ -344,8 +343,8 @@ export function GiftVoucherPageContent() {
                       {locale === "nl"
                         ? "Bedrag"
                         : locale === "de"
-                        ? "Betrag"
-                        : "Amount"}
+                          ? "Betrag"
+                          : "Amount"}
                     </span>
                     <span className="text-2xl font-bold text-amber-600">
                       {formatPrice(selectedAmount)}

@@ -31,8 +31,7 @@
 // }
 export async function validateVoucherApi({ code, subtotalAmount }) {
   try {
-    const base =
-      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+    const base = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
 
     const res = await fetch(`${base}/v1/gift-vouchers/validate`, {
       method: "POST",
