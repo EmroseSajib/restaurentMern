@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic"; // 🔥 THIS IS REQUIRED
+
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,13 +22,15 @@ export default function SuccessClient() {
 
       try {
         const base =
-          process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:4000";
+          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+
         const res = await fetch(
           `${base}/v1/gift-vouchers/stripe/success?session_id=${encodeURIComponent(sessionId)}`,
         );
+
         const json = await res.json();
         setData(json?.data ?? null);
-      } catch (e) {
+      } catch {
         setData(null);
       } finally {
         setLoading(false);
