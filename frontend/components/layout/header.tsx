@@ -13,7 +13,7 @@ import { useI18n } from "@/lib/i18n/context";
 import type { Locale } from "@/lib/i18n/translations";
 import { useCartStore } from "@/lib/store/cart-store";
 import { cn } from "@/lib/utils";
-import { Globe, Menu, Phone, ShoppingCart, X } from "lucide-react";
+import { Globe, Menu, Phone, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ export function Header() {
     // { href: "/order", label: t.nav.order },
     { href: "/reservation", label: t.nav.reservation },
     { href: "/catering", label: t.nav.catering },
-    { href: "/gift-voucher", label: t.nav.giftVoucher },
+    // { href: "/gift-voucher", label: t.nav.giftVoucher },
     { href: "/about", label: t.nav.about },
   ];
 
@@ -171,7 +171,7 @@ export function Header() {
             </DropdownMenu>
 
             {/* Cart button */}
-            <Link href="/order">
+            {/* <Link href="/order">
               <Button
                 variant="ghost"
                 size="icon"
@@ -188,14 +188,23 @@ export function Header() {
                   </span>
                 )}
               </Button>
-            </Link>
+            </Link> */}
 
             {/* Order button */}
-            <Link href="/order" className="hidden sm:block">
+            <Link
+              href="https://www.restaurantdekleineman.nl/#menu"
+              target="_blank"
+              className="hidden sm:block"
+            >
               <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold shadow-lg">
                 {t.hero.orderOnline}
               </Button>
             </Link>
+            {/* <Link href="/order" className="hidden sm:block">
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold shadow-lg">
+                {t.hero.orderOnline}
+              </Button>
+            </Link> */}
 
             {/* Mobile menu button */}
             <Button

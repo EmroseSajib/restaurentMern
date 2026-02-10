@@ -39,7 +39,7 @@ export function HeroSection() {
         {/* Restaurant name */}
         <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">
           <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-800 bg-clip-text text-transparent uppercase tracking-widest">
-            Dekleine man
+            De kleine man
           </span>
         </h1>
 
@@ -50,7 +50,10 @@ export function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Link href="/order">
+          <Link
+            href="https://www.restaurantdekleineman.nl/#menu"
+            target="_blank"
+          >
             <Button
               size="lg"
               className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-lg px-8 py-6 shadow-2xl hover:shadow-amber-500/30 transition-all"
