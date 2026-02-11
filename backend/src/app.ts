@@ -13,7 +13,6 @@ export function createApp() {
   const allowedOrigins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://dekleineman-indianrestaurant.nl/",
     "https://restaurent-mern.vercel.app",
     // add your deployed frontend domain too later
   ];
