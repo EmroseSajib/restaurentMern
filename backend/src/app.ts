@@ -14,6 +14,7 @@ export function createApp() {
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://restaurent-mern.vercel.app",
+    "https://www.dekleineman-indianrestaurant.nl/",
     // add your deployed frontend domain too later
   ];
 

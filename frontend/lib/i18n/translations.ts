@@ -29,7 +29,8 @@ export const translations = {
     },
     // Occasion Banner
     banner: {
-      default: "🎉 Special Diwali Menu Available! Order now and get 15% off!",
+      default:
+        "🎉 Buy 1 Get 1 FREE! Papadam, Naan Bread & Rice – Limited Time Offer!",
       christmas: "🎄 Christmas Special Menu - Book your table now!",
       valentine: "❤️ Valentine's Special - Romantic dinner for two",
     },
@@ -314,7 +315,7 @@ export const translations = {
     // Occasion Banner
     banner: {
       default:
-        "🎉 Speciaal Diwali Menu Beschikbaar! Bestel nu en krijg 15% korting!",
+        "🎉 Koop 1, krijg 1 GRATIS! Papadam, Naanbrood & Rijst – Alleen voor een beperkte tijd!",
       christmas: "🎄 Kerst Speciaal Menu - Reserveer nu uw tafel!",
       valentine: "❤️ Valentijn Speciaal - Romantisch diner voor twee",
     },
@@ -601,7 +602,7 @@ export const translations = {
     // Occasion Banner
     banner: {
       default:
-        "🎉 Spezielles Diwali-Menü Verfügbar! Bestellen Sie jetzt und erhalten Sie 15% Rabatt!",
+        "🎉 Kaufe 1, erhalte 1 GRATIS! Papadam, Naanbrot & Reis – Zeitlich begrenztes Angebot!",
       christmas:
         "🎄 Weihnachts-Spezialmenü - Reservieren Sie jetzt Ihren Tisch!",
       valentine: "❤️ Valentinstag Spezial - Romantisches Abendessen für zwei",
