@@ -54,7 +54,7 @@ export function HeroSection() {
             <Button
               size="lg"
               variant="outline"
-              className="border-2 border-amber-300/50 text-white hover:bg-amber-500/20 font-semibold text-lg px-8 py-6 backdrop-blur-sm bg-transparent"
+              className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-lg px-8 py-6 shadow-2xl hover:shadow-amber-500/30 transition-all"
             >
               {t.hero.reserveTable}
             </Button>
@@ -65,7 +65,7 @@ export function HeroSection() {
           >
             <Button
               size="lg"
-              className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-lg px-8 py-6 shadow-2xl hover:shadow-amber-500/30 transition-all"
+              className="border-2 border-amber-300/50 text-white hover:bg-amber-500/20 font-semibold text-lg px-8 py-6 backdrop-blur-sm bg-transparent"
             >
               {t.hero.orderOnline}
             </Button>
