@@ -9,17 +9,6 @@ export function CTASection() {
 
   const actions = [
     {
-      href: "https://www.restaurantdekleineman.nl/#menu",
-      icon: ShoppingCart,
-      label: t.hero.orderOnline,
-      description: {
-        en: "Order your favorite dishes online",
-        nl: "Bestel uw favoriete gerechten online",
-        de: "Bestellen Sie Ihre Lieblingsgerichte online",
-      },
-      gradient: "from-amber-500 to-orange-600",
-    },
-    {
       href: "/reservation",
       icon: Calendar,
       label: t.hero.reserveTable,
@@ -31,14 +20,27 @@ export function CTASection() {
       gradient: "from-orange-500 to-red-500",
     },
     {
-      href: "/gift-voucher",
-      icon: Gift,
-      label: t.nav.giftVoucher,
+      href: "https://www.restaurantdekleineman.nl/#menu",
+      icon: ShoppingCart,
+      label: t.hero.orderOnline,
       description: {
-        en: "Give the gift of great food",
-        nl: "Geef het cadeau van lekker eten",
-        de: "Verschenken Sie gutes Essen",
+        en: "Order your favorite dishes online",
+        nl: "Bestel uw favoriete gerechten online",
+        de: "Bestellen Sie Ihre Lieblingsgerichte online",
       },
+      gradient: "from-amber-500 to-orange-600",
+    },
+
+    {
+      href: "/catering",
+      icon: Gift,
+      label: t.hero.catering,
+      description: {
+        en: "Fresh catering for every special occasion.",
+        nl: "Verse catering voor elke speciale gelegenheid.",
+        de: "Frisches Catering für jeden besonderen Anlass.",
+      },
+
       gradient: "from-red-500 to-pink-500",
     },
   ];

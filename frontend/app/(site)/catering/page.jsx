@@ -317,12 +317,12 @@ export default function CateringPage() {
                 <ContactRow
                   icon={<PhoneCall className="h-4 w-4" />}
                   label="Phone"
-                  value="+31 6 12 34 56 78"
+                  value="+31 6 87 94 73 71"
                 />
                 <ContactRow
                   icon={<Mail className="h-4 w-4" />}
                   label="Email"
-                  value="catering@restaurant.com"
+                  value="restaurantdekleineman@gmail.com"
                 />
                 <div className="mt-4 rounded-2xl border bg-amber-50 px-4 py-3">
                   <div className="flex items-start gap-2">

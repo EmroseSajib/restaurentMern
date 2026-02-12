@@ -50,6 +50,15 @@ export function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <Link href="/reservation">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-2 border-amber-300/50 text-white hover:bg-amber-500/20 font-semibold text-lg px-8 py-6 backdrop-blur-sm bg-transparent"
+            >
+              {t.hero.reserveTable}
+            </Button>
+          </Link>
           <Link
             href="https://www.restaurantdekleineman.nl/#menu"
             target="_blank"
@@ -68,15 +77,6 @@ export function HeroSection() {
               className="border-2 border-amber-300/50 text-white hover:bg-amber-500/20 font-semibold text-lg px-8 py-6 backdrop-blur-sm bg-transparent"
             >
               {t.hero.catering}
-            </Button>
-          </Link>
-          <Link href="/reservation">
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 border-amber-300/50 text-white hover:bg-amber-500/20 font-semibold text-lg px-8 py-6 backdrop-blur-sm bg-transparent"
-            >
-              {t.hero.reserveTable}
             </Button>
           </Link>
         </div>
