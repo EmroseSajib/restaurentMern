@@ -15,7 +15,7 @@ Restaurant details:
 - Type: Indian restaurant
 - Address: Heezenstraat 24, 7001BR Doetinchem, Netherlands
 - Phone (restaurant): +31 6 87 94 73 71
-- Email (restaurant): info@dekleineman.nl
+- Email (restaurant): restaurantdekleineman@gmail.com
 - Location: Doetinchem, Netherlands
 - Cuisine: Indian, with traditional dishes, curries, rice dishes, vegetarian and non-vegetarian options.
 
@@ -76,7 +76,7 @@ export async function POST(req) {
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -105,7 +105,7 @@ Answer clearly, friendly, and concisely.
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ prompt }),
-      }
+      },
     );
 
     const json = await cfRes.json();
@@ -120,7 +120,7 @@ Answer clearly, friendly, and concisely.
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -140,7 +140,7 @@ Answer clearly, friendly, and concisely.
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   }
 }

@@ -20,7 +20,7 @@ export const restaurantInfo = {
   contact: {
     phone: "+31 6 8794 7371",
     phoneFormatted: "+31 6 87 94 73 71",
-    email: "info@dekleineman.nl",
+    email: "restaurantdekleineman@gmail.com",
     website: "https://dekleineman.nl",
   },
   social: {
@@ -54,8 +54,9 @@ export const restaurantInfo = {
     lat: 51.9654,
     lng: 6.2884,
   },
-  googleMapsUrl: "https://maps.google.com/?q=Heezenstraat+24,+7001BR+Doetinchem,+Netherlands",
-}
+  googleMapsUrl:
+    "https://maps.google.com/?q=Heezenstraat+24,+7001BR+Doetinchem,+Netherlands",
+};
 
 // JSON-LD Structured Data for SEO
 export function getRestaurantJsonLd(locale = "nl") {
@@ -120,5 +121,5 @@ export function getRestaurantJsonLd(locale = "nl") {
     priceRange: "€€",
     acceptsReservations: "True",
     menu: `${restaurantInfo.contact.website}/menu`,
-  }
+  };
 }

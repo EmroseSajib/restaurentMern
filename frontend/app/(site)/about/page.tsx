@@ -143,10 +143,10 @@ export default function AboutPage() {
                   <br />
                   Email:{" "}
                   <a
-                    href="mailto:info@dekleineman.nl"
+                    href="mailto:restaurantdekleineman@gmail.com"
                     className="font-medium text-amber-700 hover:underline"
                   >
-                    info@dekleineman.nl
+                    restaurantdekleineman@gmail.com
                   </a>
                 </p>
                 <p className="mt-3 text-[13px] text-slate-600">
