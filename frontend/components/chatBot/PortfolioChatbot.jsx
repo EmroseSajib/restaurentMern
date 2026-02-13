@@ -129,10 +129,11 @@ export default function FloatingPortfolioChatbot() {
                 <div className="rounded-xl bg-slate-50 px-3 py-2 text-[11px] text-slate-500">
                   You can ask things like:
                   <ul className="mt-1 list-disc pl-4">
-                    <li>“What services do you provide?”</li>
-                    <li>“Which tech stack do you use?”</li>
-                    <li>“How many years of React experience?”</li>
-                    <li>“Explain Next.js routing in simple terms.”</li>
+                    <li>“What are today’s special dishes?”</li>
+                    <li>“Do you offer vegetarian or vegan options?”</li>
+                    <li>“Can I reserve a table for tonight?”</li>
+                    <li>“Do you provide catering services?”</li>
+                    <li>“What are your opening hours?”</li>
                   </ul>
                 </div>
               )}
@@ -171,7 +172,7 @@ export default function FloatingPortfolioChatbot() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask me anything about my work…"
+                placeholder="Ask me anything about my restaurent…"
                 className="h-9 flex-1 rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none ring-0 focus:border-slate-400"
               />
               <button
