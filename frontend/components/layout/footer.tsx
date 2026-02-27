@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { restaurantInfo } from "@/lib/data/restaurant";
 import { useI18n } from "@/lib/i18n/context";
 import { Clock, Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export function Footer() {
@@ -198,15 +199,22 @@ export function Footer() {
 
       {/* Copyright */}
       <div className="bg-amber-900/50 py-4">
-        <div className="container mx-auto px-4 text-center text-amber-300/60 text-sm">
-          {t.footer.copyright}{" "}
+        <div className="flex justify-center gap-2 container mx-auto px-4 text-center items-center text-amber-300/60 text-sm ">
+          <p className="pt-1"> {t.footer.copyright} </p>
           <a
             href="https://taxis.it.com/" // 🔁 your IT website
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-amber-300 hover:text-amber-200 transition-colors"
+            className="font-semibold text-primary hover:text-amber-200 transition-colors "
           >
-            Taxis IT
+            <Image
+              src="/taxislogo.png"
+              alt="Aroma Amoris Logo"
+              width={30}
+              height={30}
+              className="h-8 w-auto object-contain pb-1 "
+              priority
+            />
           </a>
         </div>
       </div>

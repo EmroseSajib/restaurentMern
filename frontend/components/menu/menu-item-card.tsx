@@ -10,6 +10,7 @@ import { useCartStore } from "@/lib/store/cart-store";
 import { formatPrice } from "@/lib/utils/format";
 import { Leaf, Plus, Wheat } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -126,14 +127,19 @@ export function MenuItemCard({ item, variant = "default" }: MenuItemCardProps) {
           {item.spiceLevel && (
             <SpiceIndicator level={item.spiceLevel} showLabel />
           )}
-          <Button
-            onClick={handleAddToCart}
-            size="sm"
-            className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white ml-auto"
+          <Link
+            href="https://www.restaurantdekleineman.nl/#menu"
+            target="_blank"
           >
-            <Plus className="h-4 w-4 mr-1" />
-            {t.popularDishes.orderNow}
-          </Button>
+            <Button
+              // onClick={handleAddToCart}
+              size="sm"
+              className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white ml-auto"
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              {t.popularDishes.orderNow}
+            </Button>
+          </Link>
         </div>
       </CardContent>
     </Card>
