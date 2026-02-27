@@ -72,7 +72,7 @@ export function MenuItemCard({ item, variant = "default" }: MenuItemCardProps) {
     <Card className="group hover:shadow-xl transition-all overflow-hidden">
       {/* Image */}
       {item.image && (
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-36 overflow-hidden">
           <Image
             src={item.image || "/placeholder.svg"}
             alt={name}
@@ -132,7 +132,7 @@ export function MenuItemCard({ item, variant = "default" }: MenuItemCardProps) {
             className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white ml-auto"
           >
             <Plus className="h-4 w-4 mr-1" />
-            {t.popularDishes.addToCart}
+            {t.popularDishes.orderNow}
           </Button>
         </div>
       </CardContent>

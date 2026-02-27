@@ -41,7 +41,7 @@ export function Header() {
 
   const navLinks = [
     { href: "/", label: t.nav.home },
-    // { href: "/menu", label: t.nav.menu },
+    { href: "/menu", label: t.nav.menu },
     // { href: "/order", label: t.nav.order },
     { href: "/reservation", label: t.nav.reservation },
     { href: "/catering", label: t.nav.catering },

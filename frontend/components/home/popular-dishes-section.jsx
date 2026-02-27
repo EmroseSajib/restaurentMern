@@ -9,7 +9,7 @@ import { MenuItemCard } from "../menu/menu-item-card";
 
 export function PopularDishesSection({ items = [] }) {
   const { t } = useI18n();
-  const popularItems = getPopularItems().slice(0, 6);
+  const popularItems = getPopularItems().slice(6, 12);
 
   return (
     <section className="py-20 bg-white">

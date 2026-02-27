@@ -494,6 +494,7 @@ import {
   CheckCircle2,
   ChefHat,
   Clock,
+  DollarSign,
   Loader2,
   Mail,
   MapPin,
@@ -782,6 +783,11 @@ export default function CateringPage() {
           {/* SIDEBAR */}
           <div className="space-y-6">
             <SidebarCard title="Why we’re the best">
+              <Feature
+                icon={<DollarSign className="h-5 w-5" />}
+                title="Affordable Catering"
+                text="Enjoy premium taste with a special per-person price."
+              />
               <Feature
                 icon={<UtensilsCrossed className="h-5 w-5" />}
                 title="Best Cuisine"
